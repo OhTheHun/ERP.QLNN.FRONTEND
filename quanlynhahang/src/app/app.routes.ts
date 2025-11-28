@@ -3,6 +3,7 @@ import { LoginFormComponent, ResetPasswordFormComponent, CreateAccountFormCompon
 import { AuthGuardService } from './shared/services';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { QuanLiMonAnComponent } from './pages/quan-li-mon-an/quan-li-mon-an.component';
 
 export const routes: Routes = [
   {
@@ -14,6 +15,11 @@ export const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'admin/quanlimonan',
+    component: QuanLiMonAnComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: 'login-form',
