@@ -31,10 +31,10 @@ export class UnauthenticatedContentComponent {
   get title() {
     const path = this.router.url.split('/')[1];
     switch (path) {
-      case 'login-form': return 'Sign In';
-      case 'reset-password': return 'Reset Password';
-      case 'create-account': return 'Sign Up';
-      case 'change-password': return 'Change Password';
+      case 'login-form': return 'Đăng nhập';
+      case 'reset-password': return 'Tạo lại mật khẩu';
+      case 'create-account': return 'Đăng ký tài khoản';
+      case 'change-password': return 'Thay đổi mật khẩu';
       default: return '';
     }
   }
