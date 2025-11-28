@@ -41,7 +41,7 @@ export class AuthService {
     catch {
       return {
         isOk: false,
-        message: "Authentication failed"
+        message: "Xác thực không thành công"
       };
     }
   }

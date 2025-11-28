@@ -1,24 +1,28 @@
 <form class="login-form" (submit)="onSubmit($event)">
   <dx-form [formData]="formData" [disabled]="loading">
 
+    <!-- Trường Email -->
     <dxi-form-item dataField="email" editorType="dxTextBox"
       [editorOptions]="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }">
-      <dxi-form-validation-rule type="required" message="Email is required"></dxi-form-validation-rule>
-      <dxi-form-validation-rule type="email" message="Email is invalid"></dxi-form-validation-rule>
+      <dxi-form-validation-rule type="required" message="Vui lòng nhập email"></dxi-form-validation-rule>
+      <dxi-form-validation-rule type="email" message="Email không hợp lệ"></dxi-form-validation-rule>
       <dxo-form-label [visible]="false"></dxo-form-label>
     </dxi-form-item>
 
+    <!-- Trường Mật khẩu -->
     <dxi-form-item dataField="password" editorType="dxTextBox"
-      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Password', mode: 'password' }">
-      <dxi-form-validation-rule type="required" message="Password is required"></dxi-form-validation-rule>
+      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Mật khẩu', mode: 'password' }">
+      <dxi-form-validation-rule type="required" message="Vui lòng nhập mật khẩu"></dxi-form-validation-rule>
       <dxo-form-label [visible]="false"></dxo-form-label>
     </dxi-form-item>
 
+    <!-- Ghi nhớ đăng nhập -->
     <dxi-form-item dataField="rememberMe" editorType="dxCheckBox"
-      [editorOptions]="{ text: 'Remember me', elementAttr: { class: 'form-text' } }">
+      [editorOptions]="{ text: 'Ghi nhớ đăng nhập', elementAttr: { class: 'form-text' } }">
       <dxo-form-label [visible]="false"></dxo-form-label>
     </dxi-form-item>
 
+    <!-- Nút đăng nhập -->
     <dxi-form-item itemType="button">
       <dxo-form-button-options width="100%" type="default" [useSubmitBehavior]="true" [template]="'signInTemplate'">
       </dxo-form-button-options>
@@ -30,14 +34,18 @@
           <ng-container *ngIf="loading; else notLoading">
             <dx-load-indicator width="24px" height="24px" [visible]="true"></dx-load-indicator>
           </ng-container>
-          <ng-template #notLoading>Sign In</ng-template>
+          <ng-template #notLoading>Đăng nhập</ng-template>
         </span>
       </div>
     </ng-container>
 
   </dx-form>
+
+  <!-- Liên kết quên mật khẩu -->
   <div class="link">
-    <a routerLink="/reset-password">Forgot password?</a>
+    <a routerLink="/reset-password">Quên mật khẩu?</a>
   </div>
-  <dx-button stylingMode="outlined" text="Create an account" width="100%"  (click)="onCreateAccountClick()"></dx-button>
+
+  <!-- Nút tạo tài khoản mới -->
+  <dx-button stylingMode="outlined" text="Tạo tài khoản mới" width="100%" (click)="onCreateAccountClick()"></dx-button>
 </form>
