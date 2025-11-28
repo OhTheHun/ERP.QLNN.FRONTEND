@@ -1,0 +1,51 @@
+<form class="login-form" (submit)="onSubmit($event)">
+  <dx-form [formData]="formData" [disabled]="loading">
+
+    <!-- Trường Email -->
+    <dxi-form-item dataField="email" editorType="dxTextBox"
+      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }">
+      <dxi-form-validation-rule type="required" message="Vui lòng nhập email"></dxi-form-validation-rule>
+      <dxi-form-validation-rule type="email" message="Email không hợp lệ"></dxi-form-validation-rule>
+      <dxo-form-label [visible]="false"></dxo-form-label>
+    </dxi-form-item>
+
+    <!-- Trường Mật khẩu -->
+    <dxi-form-item dataField="password" editorType="dxTextBox"
+      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Mật khẩu', mode: 'password' }">
+      <dxi-form-validation-rule type="required" message="Vui lòng nhập mật khẩu"></dxi-form-validation-rule>
+      <dxo-form-label [visible]="false"></dxo-form-label>
+    </dxi-form-item>
+
+    <!-- Ghi nhớ đăng nhập -->
+    <dxi-form-item dataField="rememberMe" editorType="dxCheckBox"
+      [editorOptions]="{ text: 'Ghi nhớ đăng nhập', elementAttr: { class: 'form-text' } }">
+      <dxo-form-label [visible]="false"></dxo-form-label>
+    </dxi-form-item>
+
+    <!-- Nút đăng nhập -->
+    <dxi-form-item itemType="button">
+      <dxo-form-button-options width="100%" type="default" [useSubmitBehavior]="true" [template]="'signInTemplate'">
+      </dxo-form-button-options>
+    </dxi-form-item>
+
+    <ng-container *dxTemplate="let item of 'signInTemplate'">
+      <div>
+        <span class="dx-button-text">
+          <ng-container *ngIf="loading; else notLoading">
+            <dx-load-indicator width="24px" height="24px" [visible]="true"></dx-load-indicator>
+          </ng-container>
+          <ng-template #notLoading>Đăng nhập</ng-template>
+        </span>
+      </div>
+    </ng-container>
+
+  </dx-form>
+
+  <!-- Liên kết quên mật khẩu -->
+  <div class="link">
+    <a routerLink="/reset-password">Quên mật khẩu?</a>
+  </div>
+
+  <!-- Nút tạo tài khoản mới -->
+  <dx-button stylingMode="outlined" text="Tạo tài khoản mới" width="100%" (click)="onCreateAccountClick()"></dx-button>
+</form>
