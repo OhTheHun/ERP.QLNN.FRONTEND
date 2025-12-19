@@ -5,7 +5,8 @@
   min-height: 100%;
   height: 100%;
   width: 250px !important;
-  background-color: var(--base-bg);
+  --side-menu-bg: #3e079c;
+  background-color:  var(--side-menu-bg);
 
   ::ng-deep .menu-container {
     min-height: 100%;
@@ -31,7 +32,6 @@
 
       // ##
 
-      // ## Arrow customization
       .dx-treeview-node {
         padding: 0 0 !important;
       }
@@ -62,3 +62,49 @@
     }
   }
 }
+::ng-deep .dx-treeview {
+
+  /* mặc định */
+  .dx-treeview-item {
+    transition: background-color 0.2s ease;
+  }
+
+  .dx-treeview-item-content {
+    color: #fff !important;
+  }
+
+  .dx-treeview-item.dx-state-hover {
+    background-color: #402c65 !important; 
+  }
+
+  .dx-treeview-item.dx-state-hover
+  .dx-treeview-item-content {
+    color: #ffffff !important;
+  }
+
+  .dx-treeview-item.dx-state-hover .dx-icon {
+    color: #ffffff !important;
+  }
+
+  .dx-treeview-node.dx-state-selected
+  > .dx-treeview-item {
+    background-color: #2a144d !important;
+  }
+
+  .dx-treeview-node.dx-state-selected
+  .dx-treeview-item-content {
+    color: #ffffff !important;
+  }
+
+  .dx-treeview-node.dx-state-selected .dx-icon {
+    color: #ffffff !important;
+  }
+
+  .dx-treeview-node.dx-state-selected
+  .dx-treeview-item.dx-state-hover {
+    background-color: #2a144d !important;
+  }
+}
+
+
+

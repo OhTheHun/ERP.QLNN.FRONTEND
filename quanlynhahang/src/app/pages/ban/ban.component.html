@@ -1,0 +1,52 @@
+<div class="table-page">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <h2>Quản lý bàn ăn</h2>
+
+    </div>
+    <div class="actions">
+        <dx-date-box [(value)]="selectedDate" width="200"></dx-date-box>
+        <dx-button text="Thêm bàn ăn" width="150"
+            style="border-radius: 20px; background-color: #565eef; color: white;"></dx-button>
+    </div>
+
+    <!-- GRID -->
+    <div class="table-grid">
+        <div class="table-card" *ngFor="let table of pagedTables">
+
+            <div class="table-number">
+                {{ table.id }}
+            </div>
+
+            <div class="table-status" [ngClass]="getStatusClass(table.trangThai)">
+                {{ getStatusLabel(table.trangThai) }}
+            </div>
+
+            <div *ngIf="table.tongTien" class="table-price">
+                {{ table.tongTien | number }} VND
+            </div>
+
+            <div class="table-capacity">
+                Sức chứa: {{ table.sucChua }} người
+            </div>
+
+            <div class="table-actions">
+                <dx-button text="Sửa" type="success" stylingMode="outlined"></dx-button>
+                <dx-button text="Xóa" type="danger" stylingMode="outlined"></dx-button>
+            </div>
+
+        </div>
+    </div>
+    <div class="pagination">
+        <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
+
+        <button *ngFor="let _ of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+            [class.active]="currentPage === i + 1">
+            {{ i + 1 }}
+        </button>
+
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
+    </div>
+
+</div>

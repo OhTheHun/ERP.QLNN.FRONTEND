@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
 import { LoginFormComponent, ResetPasswordFormComponent, CreateAccountFormComponent, ChangePasswordFormComponent } from './shared/components';
 import { AuthGuardService } from './shared/services';
-import { HomeComponent } from './pages/home/home.component';
+import { DashBoardComponent } from './pages/dashboard/dashboard.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { QuanLiMonAnComponent } from './pages/quan-li-mon-an/quan-li-mon-an.component';
+import { BanComponent } from './pages/ban/ban.component';
+import { AccountComponent } from './pages/account/account.component';
 
 export const routes: Routes = [
   {
@@ -12,12 +14,12 @@ export const routes: Routes = [
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'home',
-    component: HomeComponent,
+    path: 'dashboard',
+    component: DashBoardComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'admin/quanlimonan',
+    path: 'admin/quan-ly-mon-an',
     component: QuanLiMonAnComponent,
     canActivate: [AuthGuardService]
   },
@@ -42,7 +44,17 @@ export const routes: Routes = [
     canActivate: [ AuthGuardService ]
   },
   {
+    path: 'admin/ban-an',
+    component: BanComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path:'admin/tai-khoan',
+    component: AccountComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
     path: '**',
-    redirectTo: 'home'
+    redirectTo: 'dashboard'
   }
 ];

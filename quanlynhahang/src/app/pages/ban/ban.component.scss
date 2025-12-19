@@ -1,0 +1,111 @@
+.table-page {
+  padding: 16px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.table-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px;
+}
+
+.table-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.table-number {
+  width: 58px;
+  height: 52px;
+  background: #4f7df3;
+  color: #fff;
+  font-weight: 600;
+  font-size: 18px;
+  border-radius: 6px;
+  margin: 0 auto 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-status {
+  font-weight: 700;
+  margin: 6px 0;
+  font-size: 18px;
+  &.empty { color: #6b7280; }
+  &.booked { color: #f59e0b; }
+  &.deposited { color: #7c3aed; }
+  &.occupied { color: #2563eb; }
+  &.pending_payment { color: #dc2626; }
+}
+
+.table-price {
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.table-capacity {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.table-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.pagination {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+
+  button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: #e5e7eb;
+    cursor: pointer;
+
+    &.active {
+      background: #2563eb;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .table-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .table-grid {
+    grid-template-columns: 1fr;
+  }
+}

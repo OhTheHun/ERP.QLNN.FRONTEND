@@ -6,7 +6,7 @@ import { CommonModule } from "@angular/common";
     templateUrl: 'quan-li-mon-an.component.html',
     styleUrls: ['./quan-li-mon-an.component.scss'],
     standalone: true,
-    imports: [DxFormModule, DxDataGridModule, DxButtonModule, CommonModule, DxTemplateModule],
+    imports: [DxFormModule, DxDataGridModule, DxButtonModule, CommonModule, DxTemplateModule, DxDataGridModule],
 })
 
 export class QuanLiMonAnComponent {
