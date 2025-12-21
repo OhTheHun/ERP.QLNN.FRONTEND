@@ -1,0 +1,86 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <h2>Quản lý vai trò</h2>
+
+</div>
+
+<!-- Search -->
+<div class="search-box">
+    <h4>Danh sách</h4>
+
+    <dx-button
+      text="Thêm vai trò"
+      type="default"
+      stylingMode="contained"
+      icon="plus"
+      [elementAttr]="{ class: 'btn-add-role' }"
+      (onClick)="onAdd()">
+    </dx-button>
+
+  </div>
+
+  <!-- Table -->
+  <dx-data-grid
+    [dataSource]="roles"
+    [showBorders]="true"
+    [columnAutoWidth]="true"
+    [rowAlternationEnabled]="true"
+    keyExpr="id">
+  
+    <dxo-filter-row
+      [visible]="true"
+      [applyFilter]="'auto'">
+    </dxo-filter-row>
+
+    <!-- Paging -->
+    <dxo-paging [pageSize]="4"></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="false"
+      [showInfo]="true">
+    </dxo-pager>
+
+    <!-- Editing -->
+    <dxo-editing
+      mode="row"
+      [allowUpdating]="true"
+      [allowDeleting]="true"
+      [useIcons]="true">
+    </dxo-editing>
+
+    <!-- Columns -->
+    <dxi-column dataField="ten" caption="Tên"
+        [validationRules]="[
+        { type: 'required', message: 'Tên vai trò không được để trống' },
+        { type: 'stringLength', min: 3, max: 50, message: 'Tên vai trò phải từ 3 đến 50 ký tự' }
+    ]"></dxi-column>
+    <dxi-column dataField="moTa" caption="Mô tả"
+        [validationRules]="[
+        { type: 'stringLength', max: 255, message: 'Mô tả không được vượt quá 255 ký tự' }
+  ]"></dxi-column>
+
+    <dxi-column
+    dataField="ngayTao"
+    caption="Ngày tạo"
+    dataType="datetime"
+    format="dd/MM/yyyy HH:mm:ss"
+    [allowEditing]="false">
+    </dxi-column>
+
+    <dxi-column
+    dataField="ngayCapNhat"
+    caption="Ngày cập nhật"
+    dataType="datetime"
+    format="dd/MM/yyyy HH:mm:ss"
+    [allowEditing]="false">
+    </dxi-column>
+
+
+    <!-- Command column: Sửa / Xóa -->
+    <dxi-column type="buttons" width="110">
+      <dxi-button name="edit"></dxi-button>
+      <dxi-button name="delete"></dxi-button>
+    </dxi-column>
+
+  </dx-data-grid>
+</div>

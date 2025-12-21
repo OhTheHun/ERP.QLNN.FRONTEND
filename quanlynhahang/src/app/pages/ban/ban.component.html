@@ -7,8 +7,7 @@
     </div>
     <div class="actions">
         <dx-date-box [(value)]="selectedDate" width="200"></dx-date-box>
-        <dx-button text="Thêm bàn ăn" width="150"
-            style="border-radius: 20px; background-color: #565eef; color: white;"></dx-button>
+        <dx-button text="Thêm bàn ăn" width="150" [elementAttr]="{ class: 'btn-add-ban-an' }"></dx-button>
     </div>
 
     <!-- GRID -->
@@ -40,12 +39,10 @@
     </div>
     <div class="pagination">
         <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
-
         <button *ngFor="let _ of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
             [class.active]="currentPage === i + 1">
             {{ i + 1 }}
         </button>
-
         <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
     </div>
 

@@ -29,9 +29,18 @@ export const navigation = [
     icon: 'group'
   },
   {
-    text: 'Vai trò',
-    path: '/admin/vai-tro',
-    icon: 'user'
+    text: 'Quản lí vai trò',
+    icon: 'user',
+    items: [
+      {
+        text: 'Vai trò',
+        path: '/admin/vai-tro'
+      },
+      {
+        text: 'Phân quyền',
+        path: '/admin/phan-quyen'
+      }
+    ]
   },
   {
     text: 'Tư vấn khách hàng',

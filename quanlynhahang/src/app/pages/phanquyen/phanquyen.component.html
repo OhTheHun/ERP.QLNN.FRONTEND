@@ -1,0 +1,44 @@
+<div class="page-container">
+
+  <div class="header">
+    <h3>Phân quyền cho tài khoản</h3>
+  </div>
+
+  <!-- Chọn vai trò -->
+  <div class="top-bar">
+    <dx-select-box
+      [items]="roles"
+      placeholder="Chọn vai trò..."
+      [(value)]="selectedRole"
+      width="220">
+    </dx-select-box>
+
+    <dx-button
+      text="Áp dụng"
+      type ="default"
+      stylingMode="contained"
+      (onClick)="applyPermission()">
+    </dx-button>
+  </div>
+
+  <h4 class="text-center">Danh sách chức năng</h4>
+
+  <table class="permission-table">
+    <thead>
+      <tr>
+        <th>Chức năng</th>
+        <th>Được sử dụng</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of permissions">
+        <td class="action-col">{{ item.name }}</td>
+        <td>
+          <dx-check-box [(value)]="item.enabled"></dx-check-box>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

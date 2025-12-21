@@ -6,6 +6,9 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { QuanLiMonAnComponent } from './pages/quan-li-mon-an/quan-li-mon-an.component';
 import { BanComponent } from './pages/ban/ban.component';
 import { AccountComponent } from './pages/account/account.component';
+import { VaiTroComponent } from './pages/VaiTro/vaitro.component';
+import { DatBanComponent } from './pages/DatBan/datban.component';
+import { PhanQuyenComponent } from './pages/phanquyen/phanquyen.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +54,22 @@ export const routes: Routes = [
   {
     path:'admin/tai-khoan',
     component: AccountComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'admin/vai-tro',
+    component: VaiTroComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'admin/dat-ban',
+    component: DatBanComponent,
+    canActivate: [AuthGuardService]
+
+  },
+  {
+    path: 'admin/phan-quyen',
+    component: PhanQuyenComponent,
     canActivate: [AuthGuardService]
   },
   {

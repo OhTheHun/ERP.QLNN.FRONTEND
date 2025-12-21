@@ -2,13 +2,11 @@
 
     <!-- HEADER -->
     <div class="page-header">
-        <div class="left">
             <h3>Quản lý tài khoản</h3>
-        </div>
-        <div class="right">
-            <dx-button text="Thêm tài khoản" icon="plus" type="default" class="add-btn">
+    </div>
+    <div class = "action-button">
+            <dx-button text="Thêm tài khoản" icon="plus" type="default" [elementAttr]="{ class: 'btn-add-acc' }">
             </dx-button>
-        </div>
     </div>
 
     <!-- GRID -->
@@ -16,7 +14,6 @@
         <dx-data-grid [dataSource]="users" keyExpr="id" [showBorders]="true" [columnAutoWidth]="true"
             [selection]="{ mode: 'multiple' }">
             <!-- SEARCH / FILTER / PAGING -->
-            <dxo-search-panel [visible]="true" placeholder="Tìm kiếm..."></dxo-search-panel>
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-paging [pageSize]="5"></dxo-paging>
             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">

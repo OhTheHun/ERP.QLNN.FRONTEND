@@ -98,6 +98,24 @@
   }
 }
 
+.btn-add-ban-an {
+  border-radius: 20px;
+  background-color: #565eef;
+  color: white;
+  transition: all 0.25s ease;
+}
+
+.btn-add-ban-an:hover {
+  background-color: black;
+  box-shadow: 0 4px 10px rgba(86, 94, 239, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-add-ban-an:active {
+  background-color: #3239b3;
+  transform: translateY(0);
+}
+
 @media (max-width: 1024px) {
   .table-grid {
     grid-template-columns: repeat(2, 1fr);

@@ -1,0 +1,130 @@
+<div class="page-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h2>Quản lý đặt bàn</h2>
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <dx-button
+      text="Thêm đặt bàn"
+      icon="plus"
+      stylingMode="contained"
+      [elementAttr]="{ class: 'btn-add-ban' }"
+      (onClick)="themDatBan()">
+    </dx-button>
+  </div>
+
+  <!-- DataGrid -->
+  <dx-data-grid
+    [dataSource]="datBans"
+    [showBorders]="true"
+    [columnAutoWidth]="true"
+    keyExpr="id">
+
+    <dxo-paging [pageSize]="3"></dxo-paging>
+    <dxo-pager [showInfo]="true"></dxo-pager>
+    <dxo-filter-row
+      [visible]="true"
+      [applyFilter]="'auto'">
+    </dxo-filter-row>
+
+    <!-- STT -->
+    <dxi-column
+      caption="STT"
+      width="60"
+      cellTemplate="sttTpl">
+    </dxi-column>
+
+    <!-- Thông tin khách hàng -->
+    <dxi-column
+      caption="Thông tin khách hàng"
+      cellTemplate="khTpl">
+    </dxi-column>
+
+    <!-- Thông tin đặt bàn -->
+    <dxi-column
+      caption="Thông tin đặt bàn"
+      cellTemplate="datBanTpl">
+    </dxi-column>
+
+    <!-- Trạng thái -->
+    <dxi-column
+      dataField="trangThai"
+      caption="Trạng thái"
+      width="150"
+      cellTemplate="statusTpl">
+      <dxo-lookup
+      [dataSource]="[
+        'Chờ thanh toán',
+        'Đã thanh toán cọc',
+        'Hoàn thành đơn'
+      ]">
+    </dxo-lookup>
+    </dxi-column>
+
+    <!-- Hành động -->
+    <dxi-column
+      caption="Hành động"
+      width="200"
+      cellTemplate="actionTpl">
+    </dxi-column>
+
+    <!-- STT -->
+    <div *dxTemplate="let data of 'sttTpl'">
+      {{ data.rowIndex + 1 }}
+    </div>
+
+    <!-- Thông tin khách hàng -->
+    <div *dxTemplate="let data of 'khTpl'">
+      <b>Mã hóa đơn:</b> {{ data.data.maHoaDon }}<br>
+      <b>Ngày đặt:</b> {{ data.data.ngayDat }}<br>
+      <b>Họ và tên:</b> {{ data.data.hoVaTen }}<br>
+      <b>Email:</b> {{ data.data.email }}<br>
+      <b>SĐT:</b> {{ data.data.sdt }}
+    </div>
+
+    <!-- Thông tin đặt bàn -->
+    <div *dxTemplate="let data of 'datBanTpl'">
+      <b>Số bàn:</b> {{ data.data.soBan }}<br>
+      <b>Số người:</b> {{ data.data.soNguoi }}<br>
+      <b>Tổng tiền:</b> {{ formatMoney(data.data.tongTien) }}<br>
+      <b>Tiền cọc:</b> {{ formatMoney(data.data.tienCoc) }}<br>
+      <b>Tiền còn lại:</b> {{ formatMoney(data.data.tienConLai) }}
+    </div>
+
+    <!-- Trạng thái -->
+    <div *dxTemplate="let data of 'statusTpl'">
+      <span
+        class="status"
+        [ngClass]="{
+          'paid': data.data.trangThai === 'Đã thanh toán cọc',
+          'done': data.data.trangThai === 'Hoàn thành đơn',
+          'pending': data.data.trangThai === 'Chờ thanh toán'
+        }">
+        {{ data.data.trangThai }}
+      </span>
+    </div>
+
+    <!-- Hành động -->
+    <div *dxTemplate="let data of 'actionTpl'">
+      <dx-button
+        text="Hủy"
+        type="danger"
+        stylingMode="contained"
+        class="ml-1"
+        (onClick)="huy(data.data)">
+      </dx-button>
+
+      <dx-button
+        text="Duyệt"
+        type="success"
+        stylingMode="contained"
+        class="ml-1"
+        (onClick)="duyet(data.data)">
+      </dx-button>
+    </div>
+
+  </dx-data-grid>
+</div>

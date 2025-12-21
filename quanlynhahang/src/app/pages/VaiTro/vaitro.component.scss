@@ -1,0 +1,47 @@
+.page-container {
+  padding: 16px;
+}
+
+.page-header {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.search-box h4 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 450;
+}
+
+.text-muted {
+  font-size: 12px;
+  color: #888;
+}
+
+.ml-1 {
+  margin-left: 6px;
+}
+
+.btn-add-role {
+  border-radius: 20px;
+  background-color: #565eef;
+  color: white;
+  transition: all 0.25s ease;
+}
+
+.btn-add-role:hover {
+  background-color: black;
+  box-shadow: 0 4px 10px rgba(86, 94, 239, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-add-role:active {
+  background-color: #3239b3;
+  transform: translateY(0);
+}

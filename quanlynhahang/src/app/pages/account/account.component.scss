@@ -1,6 +1,5 @@
 .account-page {
   padding: 16px;
-  background: #f5f7fb;
   min-height: 100%;
 }
 
@@ -12,29 +11,19 @@
   margin-bottom: 16px;
 }
 
-.page-header .left {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .page-header h3 {
   margin: 0;
-  font-size: 20px;
   font-weight: 600;
-  color: #1f2937;
 }
-
+.action-button {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
 /* ===== FILTER ===== */
 .filters {
   display: flex;
   gap: 12px;
-}
-
-/* ===== ADD BUTTON ===== */
-.add-btn {
-  border-radius: 20px;
-  padding: 6px 18px;
 }
 
 /* ===== GRID WRAPPER ===== */
@@ -112,7 +101,6 @@
     display: inline-block;
 }
 
-/* VAI TRÒ */
 /* VAI TRÒ NGƯỜI DÙNG */
 .status-khachhang {
     background-color: #ffe0b2; 
@@ -154,7 +142,23 @@
     display: inline-block;
 }
 
+.btn-add-acc {
+  border-radius: 20px;
+  background-color: #565eef;
+  color: white;
+  transition: all 0.25s ease;
+}
 
+.btn-add-acc:hover {
+  background-color: black;
+  box-shadow: 0 4px 10px rgba(86, 94, 239, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-add-acc:active {
+  background-color: #3239b3;
+  transform: translateY(0);
+}
 
 @media (max-width: 768px) {
   .page-header {
