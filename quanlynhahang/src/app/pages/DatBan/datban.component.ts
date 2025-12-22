@@ -29,7 +29,6 @@ export class DatBanComponent implements OnInit {
   isPopupVisible: boolean = false;
   paymentMethods = ['Cash', 'Transfer'];
 
-  // Form dữ liệu
   newOrder: any = {
     orderCode: '',
     customer: '',
@@ -56,7 +55,7 @@ export class DatBanComponent implements OnInit {
     this.orderService.getOrders().subscribe((res) => {
         this.datBans = res.map((item: any) => ({
             ...item, // Giữ lại các trường khác
-            
+            id: item._id,
             // 👇 MAP TÊN TIẾNG ANH (Server) -> TIẾNG VIỆT (HTML)
             maHoaDon: item.orderCode,   
             ngayDat: item.bookingDate,  
@@ -65,7 +64,8 @@ export class DatBanComponent implements OnInit {
             trangThai: this.translateStatus(item.status),
             originalStatus: item.status
         }));
-    });
+        
+      });
   }
 
   loadMenu() {
