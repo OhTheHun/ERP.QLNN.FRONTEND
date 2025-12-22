@@ -1,130 +1,210 @@
 <div class="page-container">
 
-  <!-- Header -->
   <div class="page-header">
     <h2>Quản lý đặt bàn</h2>
   </div>
 
-  <!-- Filter -->
   <div class="filter-bar">
     <dx-button
       text="Thêm đặt bàn"
       icon="plus"
       stylingMode="contained"
+      type="default"
       [elementAttr]="{ class: 'btn-add-ban' }"
-      (onClick)="themDatBan()">
+      (onClick)="openAddModal()">
     </dx-button>
   </div>
 
-  <!-- DataGrid -->
   <dx-data-grid
     [dataSource]="datBans"
     [showBorders]="true"
     [columnAutoWidth]="true"
     keyExpr="id">
 
-    <dxo-paging [pageSize]="3"></dxo-paging>
+    <dxo-paging [pageSize]="5"></dxo-paging>
     <dxo-pager [showInfo]="true"></dxo-pager>
-    <dxo-filter-row
-      [visible]="true"
-      [applyFilter]="'auto'">
-    </dxo-filter-row>
+    <dxo-filter-row [visible]="true" [applyFilter]="'auto'"></dxo-filter-row>
 
-    <!-- STT -->
-    <dxi-column
-      caption="STT"
-      width="60"
-      cellTemplate="sttTpl">
+    <dxi-column caption="STT" width="60" cellTemplate="sttTpl"></dxi-column>
+
+    <dxi-column caption="Thông tin khách hàng" cellTemplate="khTpl"></dxi-column>
+
+    <dxi-column caption="Chi tiết đơn hàng" cellTemplate="datBanTpl"></dxi-column>
+
+    <dxi-column dataField="trangThai" caption="Trạng thái" width="180" cellTemplate="statusTpl">
+      <dxo-lookup [dataSource]="['Chờ duyệt', 'Đang phục vụ', 'Hoàn thành', 'Đã hủy']"></dxo-lookup>
     </dxi-column>
 
-    <!-- Thông tin khách hàng -->
-    <dxi-column
-      caption="Thông tin khách hàng"
-      cellTemplate="khTpl">
-    </dxi-column>
+    <dxi-column caption="Hành động" width="200" cellTemplate="actionTpl"></dxi-column>
 
-    <!-- Thông tin đặt bàn -->
-    <dxi-column
-      caption="Thông tin đặt bàn"
-      cellTemplate="datBanTpl">
-    </dxi-column>
+    <div *dxTemplate="let data of 'sttTpl'">{{ data.rowIndex + 1 }}</div>
 
-    <!-- Trạng thái -->
-    <dxi-column
-      dataField="trangThai"
-      caption="Trạng thái"
-      width="150"
-      cellTemplate="statusTpl">
-      <dxo-lookup
-      [dataSource]="[
-        'Chờ thanh toán',
-        'Đã thanh toán cọc',
-        'Hoàn thành đơn'
-      ]">
-    </dxo-lookup>
-    </dxi-column>
-
-    <!-- Hành động -->
-    <dxi-column
-      caption="Hành động"
-      width="200"
-      cellTemplate="actionTpl">
-    </dxi-column>
-
-    <!-- STT -->
-    <div *dxTemplate="let data of 'sttTpl'">
-      {{ data.rowIndex + 1 }}
-    </div>
-
-    <!-- Thông tin khách hàng -->
     <div *dxTemplate="let data of 'khTpl'">
       <b>Mã hóa đơn:</b> {{ data.data.maHoaDon }}<br>
-      <b>Ngày đặt:</b> {{ data.data.ngayDat }}<br>
-      <b>Họ và tên:</b> {{ data.data.hoVaTen }}<br>
-      <b>Email:</b> {{ data.data.email }}<br>
-      <b>SĐT:</b> {{ data.data.sdt }}
+      <b>Ngày đặt:</b> {{ data.data.ngayDat | date:'dd/MM/yyyy HH:mm' }}<br>
+      <b>Khách hàng:</b> {{ data.data.customer }}
     </div>
 
-    <!-- Thông tin đặt bàn -->
     <div *dxTemplate="let data of 'datBanTpl'">
-      <b>Số bàn:</b> {{ data.data.soBan }}<br>
-      <b>Số người:</b> {{ data.data.soNguoi }}<br>
-      <b>Tổng tiền:</b> {{ formatMoney(data.data.tongTien) }}<br>
-      <b>Tiền cọc:</b> {{ formatMoney(data.data.tienCoc) }}<br>
-      <b>Tiền còn lại:</b> {{ formatMoney(data.data.tienConLai) }}
+      <b>Bàn số:</b> {{ data.data.tableNumber }} ({{ data.data.peopleCount }} người)<br>
+      
+      <div *ngIf="data.data.orderFood && data.data.orderFood.length > 0" class="food-list">
+        <b>Món đã gọi:</b>
+        <ul style="margin: 0; padding-left: 20px;">
+          <li *ngFor="let food of data.data.orderFood">{{ food }}</li>
+        </ul>
+      </div>
+
+      <b>Thanh toán:</b> {{ data.data.payment }}<br>
+      <b style="color: #d63031;">Tổng tiền: {{ formatMoney(data.data.totalAmount) }}</b>
     </div>
 
-    <!-- Trạng thái -->
     <div *dxTemplate="let data of 'statusTpl'">
-      <span
-        class="status"
+      <span class="status"
         [ngClass]="{
-          'paid': data.data.trangThai === 'Đã thanh toán cọc',
-          'done': data.data.trangThai === 'Hoàn thành đơn',
-          'pending': data.data.trangThai === 'Chờ thanh toán'
+          'pending': data.data.originalStatus === 'Waiting',
+          'paid': data.data.originalStatus === 'CONFIRMED',
+          'done': data.data.originalStatus === 'COMPLETED',
+          'cancel': data.data.originalStatus === 'CANCELLED'
         }">
         {{ data.data.trangThai }}
       </span>
     </div>
 
-    <!-- Hành động -->
     <div *dxTemplate="let data of 'actionTpl'">
-      <dx-button
-        text="Hủy"
-        type="danger"
-        stylingMode="contained"
-        class="ml-1"
+      
+      <dx-button 
+        *ngIf="data.data.originalStatus !== 'COMPLETED' && data.data.originalStatus !== 'CANCELLED'"
+        text="Hủy" 
+        type="danger" 
+        stylingMode="contained" 
+        class="ml-1" 
         (onClick)="huy(data.data)">
       </dx-button>
 
-      <dx-button
-        text="Duyệt"
-        type="success"
-        stylingMode="contained"
-        class="ml-1"
+      <dx-button 
+        *ngIf="data.data.originalStatus === 'Waiting'"
+        text="Duyệt" 
+        type="success" 
+        stylingMode="contained" 
+        class="ml-1" 
         (onClick)="duyet(data.data)">
       </dx-button>
+
+      <dx-button 
+        *ngIf="data.data.originalStatus === 'CONFIRMED'"
+        text="Thanh toán" 
+        type="default" 
+        stylingMode="contained" 
+        class="ml-1" 
+        (onClick)="hoanThanh(data.data)"> </dx-button>
+
     </div>
 
   </dx-data-grid>
 </div>
+
+<dx-popup 
+    [(visible)]="isPopupVisible" 
+    title="Tạo đơn đặt bàn mới" 
+    [width]="1100" 
+    [height]="650"
+    [showCloseButton]="true">
+    
+    <div *dxTemplate="let data of 'content'">
+        <div class="booking-layout">
+            
+            <div class="col-table">
+                <h4 class="col-title">1. Chọn Bàn</h4>
+                <div class="table-list">
+                    <div *ngFor="let table of availableTables" 
+                         class="table-item" 
+                         [class.selected]="newOrder.tableNumber === table.tenBan"
+                         (click)="selectTable(table.tenBan)">
+                        <span class="t-num">{{ table.tenBan }}</span>
+                        <span class="t-cap">{{ table.sucChua }} chỗ</span>
+                    </div>
+                    <div *ngIf="availableTables.length === 0" class="empty-msg">
+                        <i class="dx-icon dx-icon-info"></i> Hết bàn trống!
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-menu">
+                <h4 class="col-title">2. Chọn Món Ăn</h4>
+                
+                <dx-tabs 
+                    [dataSource]="menuCategories" 
+                    [selectedIndex]="0"
+                    (onItemClick)="onTabChange($event)">
+                </dx-tabs>
+
+                <div class="menu-list">
+                    <div class="menu-item" *ngFor="let item of filteredMenu">
+                        <dx-check-box 
+                            [(value)]="item.selected" 
+                            (onValueChanged)="updateSelection(item)">
+                        </dx-check-box>
+                        
+                        <div class="item-info">
+                            <div class="item-name">{{ item.ten }}</div>
+                            <div class="item-price">{{ formatMoney(item.gia) }}</div>
+                        </div>
+
+                        <div class="item-qty" *ngIf="item.selected">
+                            <dx-number-box 
+                                [(value)]="item.quantity" 
+                                [min]="1" [width]="60"
+                                (onValueChanged)="updateSelection(item)">
+                            </dx-number-box>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-info">
+                <h4 class="col-title">3. Thông tin</h4>
+                
+                <div class="form-group">
+                    <label>Bàn đã chọn:</label>
+                    <div class="highlight-text">{{ newOrder.tableNumber || '...' }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tên khách hàng:</label>
+                    <dx-text-box [(value)]="newOrder.customer" placeholder="Nhập tên khách"></dx-text-box>
+                </div>
+
+                <div class="form-group">
+                    <label>Số người:</label>
+                    <dx-number-box [(value)]="newOrder.peopleCount" [min]="1"></dx-number-box>
+                </div>
+
+                <div class="form-group">
+                    <label>Phương thức TT:</label>
+                    <dx-select-box 
+                        [items]="paymentMethods" 
+                        [(value)]="newOrder.payment">
+                    </dx-select-box>
+                </div>
+
+                <div class="total-section">
+                    <span>Tổng tiền món:</span>
+                    <span class="total-price">{{ formatMoney(newOrder.totalAmount) }}</span>
+                </div>
+
+                <div class="popup-footer">
+                    <dx-button 
+                        text="XÁC NHẬN ĐẶT BÀN" 
+                        type="success" 
+                        width="100%" 
+                        height="45"
+                        icon="check"
+                        (onClick)="saveOrder()">
+                    </dx-button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</dx-popup>
