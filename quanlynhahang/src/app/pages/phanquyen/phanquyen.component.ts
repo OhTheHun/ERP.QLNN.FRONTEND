@@ -46,7 +46,5 @@ export class PhanQuyenComponent {
     };
 
     console.log('Payload gửi backend:', payload);
-    // Ví dụ payload:
-    // { role: 'Nhân viên', permissions: ['PRODUCT','TABLE','RESERVATION'] }
   }
 }

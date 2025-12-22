@@ -48,11 +48,8 @@
   font-weight: 700;
   margin: 6px 0;
   font-size: 18px;
-  &.empty { color: #6b7280; }
-  &.booked { color: #f59e0b; }
-  &.deposited { color: #7c3aed; }
-  &.occupied { color: #2563eb; }
-  &.pending_payment { color: #dc2626; }
+  &.empty { color: #f12207; }
+  &.occupied { color: #07ea0a; }
 }
 
 .table-price {

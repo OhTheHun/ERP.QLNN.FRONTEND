@@ -8,10 +8,7 @@ export interface TableItem {
   tenBan: string;
   trangThai:
     | 'EMPTY'
-    | 'BOOKED'
-    | 'DEPOSITED'
     | 'OCCUPIED'
-    | 'PENDING_PAYMENT';
   sucChua: number;
   tongTien?: number;
 }
@@ -32,26 +29,23 @@ export class BanComponent {
     ngOnInit() {
         this.tables = [
             { id: 1, tenBan: 'Bàn 1', trangThai: 'EMPTY', sucChua: 2 },
-            { id: 2, tenBan: 'Bàn 2', trangThai: 'BOOKED', sucChua: 2 },
-            { id: 3, tenBan: 'Bàn 3', trangThai: 'DEPOSITED', sucChua: 2 },
+            { id: 2, tenBan: 'Bàn 2', trangThai: 'EMPTY', sucChua: 2 },
+            { id: 3, tenBan: 'Bàn 3', trangThai: 'EMPTY', sucChua: 2 },
             { id: 4, tenBan: 'Bàn 4', trangThai: 'OCCUPIED', sucChua: 2, tongTien: 1500000 },
-            { id: 5, tenBan: 'Bàn 5', trangThai: 'PENDING_PAYMENT', sucChua: 2, tongTien: 700000 },
+            { id: 5, tenBan: 'Bàn 5', trangThai: 'EMPTY', sucChua: 2, tongTien: 700000 },
             { id: 6, tenBan: 'Bàn 6', trangThai: 'EMPTY', sucChua: 2 },
             { id: 7, tenBan: 'Bàn 7', trangThai: 'OCCUPIED', sucChua: 2, tongTien: 1500000 },
-            { id: 8, tenBan: 'Bàn 8', trangThai: 'PENDING_PAYMENT', sucChua: 2, tongTien: 700000 },
+            { id: 8, tenBan: 'Bàn 8', trangThai: 'EMPTY', sucChua: 2, tongTien: 700000 },
             { id: 9, tenBan: 'Bàn 9', trangThai: 'EMPTY', sucChua: 2 },
             { id: 7, tenBan: 'Bàn 10', trangThai: 'OCCUPIED', sucChua: 2, tongTien: 1500000 },
-            { id: 8, tenBan: 'Bàn 11', trangThai: 'PENDING_PAYMENT', sucChua: 2, tongTien: 700000 },
+            { id: 8, tenBan: 'Bàn 11', trangThai: 'EMPTY', sucChua: 2, tongTien: 700000 },
             { id: 9, tenBan: 'Bàn 12', trangThai: 'EMPTY', sucChua: 2 },
         ];
     }
   getStatusLabel(status: TableItem['trangThai']) {
     return {
       EMPTY: 'Bàn trống',
-      BOOKED: 'Bàn đã đặt',
-      DEPOSITED: 'Bàn đã cọc',
-      OCCUPIED: 'Bàn có khách',
-      PENDING_PAYMENT: 'Bàn chờ thanh toán'
+      OCCUPIED: 'Bàn có khách'
     }[status];
   }
 

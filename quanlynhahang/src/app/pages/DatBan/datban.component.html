@@ -30,13 +30,6 @@
       [applyFilter]="'auto'">
     </dxo-filter-row>
 
-    <!-- STT -->
-    <dxi-column
-      caption="STT"
-      width="60"
-      cellTemplate="sttTpl">
-    </dxi-column>
-
     <!-- Thông tin khách hàng -->
     <dxi-column
       caption="Thông tin khách hàng"
@@ -71,11 +64,6 @@
       cellTemplate="actionTpl">
     </dxi-column>
 
-    <!-- STT -->
-    <div *dxTemplate="let data of 'sttTpl'">
-      {{ data.rowIndex + 1 }}
-    </div>
-
     <!-- Thông tin khách hàng -->
     <div *dxTemplate="let data of 'khTpl'">
       <b>Mã hóa đơn:</b> {{ data.data.maHoaDon }}<br>
@@ -87,7 +75,6 @@
 
     <!-- Thông tin đặt bàn -->
     <div *dxTemplate="let data of 'datBanTpl'">
-      <b>Số bàn:</b> {{ data.data.soBan }}<br>
       <b>Số người:</b> {{ data.data.soNguoi }}<br>
       <b>Tổng tiền:</b> {{ formatMoney(data.data.tongTien) }}<br>
       <b>Tiền cọc:</b> {{ formatMoney(data.data.tienCoc) }}<br>
@@ -100,7 +87,7 @@
         class="status"
         [ngClass]="{
           'paid': data.data.trangThai === 'Đã thanh toán cọc',
-          'done': data.data.trangThai === 'Hoàn thành đơn',
+          'done': data.data.trangThai === 'Đã thanh toán',
           'pending': data.data.trangThai === 'Chờ thanh toán'
         }">
         {{ data.data.trangThai }}
@@ -128,3 +115,13 @@
 
   </dx-data-grid>
 </div>
+
+
+<pop-up-add
+  [title]="'Thêm đặt bàn'"
+  [(visible)]="popupVisible"
+  [fields]="ThemBanAnField"
+  [formData]="{}"
+  (save)="onSaveData($event)"
+  (cancelAction)="onCancelPopup()">
+</pop-up-add>

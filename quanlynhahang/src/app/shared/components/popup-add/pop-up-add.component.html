@@ -1,0 +1,32 @@
+<dx-popup 
+  [(visible)]="visible" 
+  [showTitle]="true" 
+  [title]="title" 
+  [width]="700" 
+  [height]="500"
+  [dragEnabled]="true"
+  [showCloseButton]="false"
+  (onHiding)="close()">
+
+  <dx-form 
+    #form
+    [formData]="data"
+    [colCount]="2"
+    [items]="fields">
+  </dx-form>
+
+  <dxi-popup-toolbar-item
+    widget="dxButton"
+    location="after"
+    toolbar="bottom"
+    [options]="cancelButtonOptions">
+  </dxi-popup-toolbar-item>
+
+  <dxi-popup-toolbar-item
+    widget="dxButton"
+    location="after"
+    toolbar="bottom"
+    [options]="saveButtonOptions">
+  </dxi-popup-toolbar-item>
+
+</dx-popup>
