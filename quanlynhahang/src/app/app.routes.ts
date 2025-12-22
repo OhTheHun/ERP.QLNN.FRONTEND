@@ -9,6 +9,7 @@ import { AccountComponent } from './pages/account/account.component';
 import { VaiTroComponent } from './pages/VaiTro/vaitro.component';
 import { DatBanComponent } from './pages/DatBan/datban.component';
 import { PhanQuyenComponent } from './pages/phanquyen/phanquyen.component';
+import { DiscountComponent } from './pages/discount/discount.component';
 
 export const routes: Routes = [
   {
@@ -70,6 +71,11 @@ export const routes: Routes = [
   {
     path: 'admin/phan-quyen',
     component: PhanQuyenComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'admin/quan-ly-khuyen-mai',
+    component: DiscountComponent,
     canActivate: [AuthGuardService]
   },
   {
