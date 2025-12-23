@@ -6,7 +6,7 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { AuthService } from '../../services';
-
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-form',
@@ -19,6 +19,7 @@ import { AuthService } from '../../services';
     DxFormModule,
     DxButtonModule,
     DxLoadIndicatorModule,
+    HttpClientModule
   ]
 })
 export class LoginFormComponent {
@@ -33,8 +34,9 @@ export class LoginFormComponent {
     this.loading = true;
 
     const result = await this.authService.logIn(email, password);
+    this.loading=false;
     if (!result.isOk) {
-      this.loading = false;
+      //this.loading = false;
       notify(result.message, 'error', 2000);
     }
   }

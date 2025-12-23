@@ -22,11 +22,15 @@
 
   <!-- Table -->
   <dx-data-grid
-    [dataSource]="roles"
+    [dataSource]="role"
     [showBorders]="true"
     [columnAutoWidth]="true"
     [rowAlternationEnabled]="true"
-    keyExpr="id">
+    keyExpr="id"
+    (onSelectionChanged)="onSelectionChanged($event)" 
+            (onRowUpdated)="onRowUpdated($event)" 
+            (onRowInserted)="onRowInserted($event)"
+            (onRowRemoved)="onRowRemoved($event)">
   
     <dxo-filter-row
       [visible]="true"
@@ -43,6 +47,7 @@
     <!-- Editing -->
     <dxo-editing
       mode="row"
+      [allowAdding]="true"
       [allowUpdating]="true"
       [allowDeleting]="true"
       [useIcons]="true">

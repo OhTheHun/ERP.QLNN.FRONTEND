@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { BehaviorSubject } from 'rxjs'; 
 
+import { HttpClient } from '@angular/common/http';
+
 export interface IUser {
   email: string;
   role: 'ADMIN' | 'NHANVIEN' | 'THUNGAN'| ' ';
@@ -23,6 +25,9 @@ export class AuthService {
   private userSubject = new BehaviorSubject<IUser | null>(null);
   user$ = this.userSubject.asObservable();
   private _user: IUser | null = null;
+  
+  private apiUrl = 'http://localhost:3000/api/auth'; // Replace with your backend URL
+  //constructor(private http: HttpClient, private router: Router) {}
 
   get loggedIn(): boolean {
     return !!this._user;
@@ -38,13 +43,13 @@ export class AuthService {
     localStorage.setItem('lastPath', value);
   }
 
-  constructor(private router: Router) {
+  constructor(private http: HttpClient, private router: Router) {
     //check role user
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
       this._user = JSON.parse(savedUser) as IUser; 
       if (!this._user.role) {
-        this._user.role = 'ADMIN'; // đổi role ở đây
+        this._user.role = 'THUNGAN'; // đổi role ở đây
       }
       this.userSubject.next(this._user); 
     }
@@ -58,6 +63,7 @@ export class AuthService {
   async logIn(email: string, password: string) {
     try {
       // GÁN CỨNG ROLE TEST
+      const response: any = await this.http.post(`${this.apiUrl}/login`, { email, password })
       const role: 'ADMIN' | 'NHANVIEN' | 'THUNGAN' = 'ADMIN'; // thay khi có API
       this._user = { ...defaultUser, email, role };
       this.userSubject.next(this._user);
@@ -69,6 +75,13 @@ export class AuthService {
         isOk: true,
         data: this._user
       };
+      /*const response: any = await this.http.post(`${this.apiUrl}/login`, { email, password }).toPromise();
+      this._user = response.user;
+      this.userSubject.next(this._user);
+      localStorage.setItem('user', JSON.stringify(this._user));
+
+      this.router.navigate(['/dashboard']);
+      return { isOk: true, data: this._user };*/
     }
     catch {
       return {

@@ -34,7 +34,7 @@ export const navigation = [
     text: 'Tài khoản',
     path: '/admin/tai-khoan',
     icon: 'group',
-    roles: ['ADMIN']
+    roles: ['ADMIN','NHANVIEN']
   },
   {
     text: 'Quản lí vai trò',
