@@ -37,7 +37,6 @@
     </div>
 </div>
 
-<!--Chart-->
 <div class="header-chart">
     <div class="invoice-header">
         <h3>Thống kê hóa đơn</h3>
@@ -47,9 +46,7 @@
         </dx-date-box>
     </div>
 
-        <!-- BODY -->
         <div class="invoice-body">
-            <!-- LEGEND -->
             <div class="invoice-legend">
                 <div class="legend-item" *ngFor="let item of invoiceStats">
                     <span class="color-box" [style.background]="item.color"></span>
@@ -57,15 +54,21 @@
                 </div>
             </div>
 
-            <!-- CHART -->
-            <dx-pie-chart class="invoice-chart" [dataSource]="invoiceStats" type="doughnut" palette="Soft Pastel" 
-                [innerRadius]="0.4" >
+            <dx-pie-chart 
+                class="invoice-chart" 
+                [dataSource]="invoiceStats" 
+                type="doughnut" 
+                palette="Soft Pastel" 
+                [innerRadius]="0.4"
+                [customizePoint]="customizePoint">
+
                 <dxi-series argumentField="label" valueField="value">
                     <dxo-label [visible]="true" position="outside" format="fixedPoint">
+                        <dxo-connector [visible]="true"></dxo-connector>
                     </dxo-label>
                 </dxi-series>
-                  <dxo-size [width]="520" [height]="320"></dxo-size>
 
+                <dxo-size [width]="520" [height]="320"></dxo-size>
                 <dxo-legend [visible]="false"></dxo-legend>
             </dx-pie-chart>
         </div>

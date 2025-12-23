@@ -1,54 +1,43 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-import { BehaviorSubject } from 'rxjs'; 
 
 export interface IUser {
   email: string;
-  role: 'ADMIN' | 'NHANVIEN' | 'THUNGAN'| ' ';
   avatarUrl?: string;
 }
 
 const defaultPath = '/';
 
-const defaultUser: IUser = {
+const defaultUser = {
   email: '',
-  role: 'ADMIN',
   avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
 };
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
-  private userSubject = new BehaviorSubject<IUser | null>(null);
-  user$ = this.userSubject.asObservable();
+
   private _user: IUser | null = null;
 
   get loggedIn(): boolean {
     return !!this._user;
   }
 
-  get user(): IUser | null {
-    return this._user;
-  }
-
   private _lastAuthenticatedPath: string = defaultPath;
+
   set lastAuthenticatedPath(value: string) {
     this._lastAuthenticatedPath = value;
+    // LƯU PATH ĐỂ REFRESH KHÔNG MẤT
     localStorage.setItem('lastPath', value);
   }
 
   constructor(private router: Router) {
-    //check role user
+    // RESTORE USER KHI REFRESH
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
-      this._user = JSON.parse(savedUser) as IUser; 
-      if (!this._user.role) {
-        this._user.role = 'ADMIN'; // đổi role ở đây
-      }
-      this.userSubject.next(this._user); 
+      this._user = JSON.parse(savedUser);
     }
 
+    // RESTORE PATH KHI REFRESH
     const lastPath = localStorage.getItem('lastPath');
     if (lastPath) {
       this._lastAuthenticatedPath = lastPath;
@@ -57,10 +46,10 @@ export class AuthService {
 
   async logIn(email: string, password: string) {
     try {
-      // GÁN CỨNG ROLE TEST
-      const role: 'ADMIN' | 'NHANVIEN' | 'THUNGAN' = 'ADMIN'; // thay khi có API
-      this._user = { ...defaultUser, email, role };
-      this.userSubject.next(this._user);
+      // Giả lập request thành công
+      this._user = { ...defaultUser, email };
+
+      // 🔥 SAVE USER
       localStorage.setItem('user', JSON.stringify(this._user));
 
       this.router.navigate([this._lastAuthenticatedPath]);
@@ -114,50 +103,51 @@ export class AuthService {
     }
   }
 
+  //clear storage lưu trữ thông tin user
   async logOut() {
     this._user = null;
-    this.userSubject.next(null);
     localStorage.removeItem('user');
     localStorage.removeItem('lastPath');
     this.router.navigate(['/login-form']);
   }
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthGuardService implements CanActivate {
 
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
 
     const isLoggedIn = this.authService.loggedIn;
 
-    const authPages = [
+    const isAuthForm = [
       'login-form',
       'reset-password',
       'create-account',
       'change-password/:recoveryCode'
-    ];
+    ].includes(route.routeConfig?.path || defaultPath);
 
-    const isAuthPage = authPages.includes(
-      route.routeConfig?.path || ''
-    );
+    if (isLoggedIn && isAuthForm) {
+      this.router.navigate([defaultPath]);
+      return false;
+    }
 
-    if (!isLoggedIn && !isAuthPage) {
+    if (!isLoggedIn && !isAuthForm) {
       this.router.navigate(['/login-form']);
       return false;
     }
 
-    if (isLoggedIn && isAuthPage) {
-      this.router.navigate(['/dashboard']);
-      return false;
+    // save path hiện tại
+    if (isLoggedIn) {
+      const currentPath =
+        '/' + route.url.map(segment => segment.path).join('/');
+      this.authService.lastAuthenticatedPath =
+        currentPath === '/' ? defaultPath : currentPath;
     }
-
     return true;
   }
 }
