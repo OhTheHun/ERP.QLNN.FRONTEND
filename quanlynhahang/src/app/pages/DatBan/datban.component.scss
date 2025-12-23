@@ -62,7 +62,7 @@
 .ml-1 { margin-left: 8px; }
 
 // ==========================================
-// 2. STYLE CHO POPUP 3 CỘT (QUAN TRỌNG)
+// 2. STYLE CHO POPUP 3 CỘT (ĐÃ SỬA CỐ ĐỊNH BÀN)
 // ==========================================
 
 .booking-layout {
@@ -93,16 +93,26 @@
     .table-list {
       flex: 1;
       overflow-y: auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); // Tự chia cột responsive
-      gap: 10px;
+      
+      // 👇 SỬA GRID: Cố định 90px mỗi cột, căn trái
+      display: flex;       
+      flex-wrap: wrap;     // Tự xuống dòng khi hết chỗ
+      align-content: flex-start; // Dồn hết lên trên
+      gap: 8px;            // Khoảng cách giữa các bàn chỉ để 8px (siêu gọn)
       padding-bottom: 10px;
 
       .table-item {
         background: #f3f4f6;
-        padding: 15px 5px;
+        // 👇 SỬA ITEM: Cố định kích thước vuông vức
+        width: 80px;
+        height: 80px;
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
         border-radius: 8px;
-        text-align: center;
         cursor: pointer;
         border: 2px solid transparent;
         transition: all 0.2s;
@@ -122,7 +132,7 @@
         }
 
         .t-num { display: block; font-weight: 800; font-size: 18px; margin-bottom: 4px; }
-        .t-cap { font-size: 11px; color: #666; }
+        .t-cap { font-size: 11px; color: #666; font-weight: 600; }
       }
       
       .empty-msg {
@@ -225,7 +235,7 @@
 // 3. OVERRIDES & UTILS
 // ==========================================
 
-// Custom thanh cuộn cho đẹp
+// Custom thanh cuộn
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+// 👇 QUAN TRỌNG: Phải có chữ export ở đây
 export class TableService {
   
   private apiUrl = 'http://localhost:3000/api/tables';

@@ -1,19 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http'; 
-import { DxButtonModule, DxDataGridModule, DxSelectBoxModule, DxTextBoxModule, DxPopupModule, DxFormModule, DxNumberBoxModule, DxCheckBoxModule, DxTabsModule } from 'devextreme-angular'; 
+import { 
+  DxButtonModule, DxDataGridModule, DxSelectBoxModule, 
+  DxTextBoxModule, DxPopupModule, DxFormModule, 
+  DxNumberBoxModule, DxCheckBoxModule, DxTabsModule, DxListModule 
+} from 'devextreme-angular'; 
 
 import { OrderService } from '../../shared/services/order.service';
 import { TableService } from '../../shared/services/table.service'; 
-import { MenuService } from '../../shared/services/menu.service'; // Nhớ import MenuService
+import { MenuService } from '../../shared/services/menu.service'; 
+import { PromotionService } from '../../shared/services/promotion.service'; 
 
 @Component({
   selector: 'app-dat-ban',
   templateUrl: './datban.component.html',
   styleUrls: ['./datban.component.scss'],
   standalone: true,
-  imports: [DxButtonModule, DxDataGridModule, CommonModule, DxTextBoxModule, DxSelectBoxModule, HttpClientModule, DxPopupModule, DxFormModule, DxNumberBoxModule, DxCheckBoxModule, DxTabsModule],
-  providers: [OrderService, TableService, MenuService] 
+  imports: [
+    DxButtonModule, DxDataGridModule, CommonModule, 
+    DxTextBoxModule, DxSelectBoxModule, HttpClientModule, 
+    DxPopupModule, DxFormModule, DxNumberBoxModule, 
+    DxCheckBoxModule, DxTabsModule, DxListModule
+  ],
+  providers: [OrderService, TableService, MenuService, PromotionService] 
 })
 export class DatBanComponent implements OnInit {
 
@@ -26,8 +36,15 @@ export class DatBanComponent implements OnInit {
   currentCategory: number = 0;
   filteredMenu: any[] = [];
   
+  // --- BIẾN QUẢN LÝ POPUP ---
   isPopupVisible: boolean = false;
+  isFoodPopupVisible: boolean = false; 
+  isEditMode: boolean = false;        
+  editingId: string = '';              
+  currentFoodView: any[] = [];        
+
   paymentMethods = ['Cash', 'Transfer'];
+  selectedTableCapacity: number = 0; 
 
   newOrder: any = {
     orderCode: '',
@@ -39,10 +56,23 @@ export class DatBanComponent implements OnInit {
     totalAmount: 0
   };
 
+  // --- BIẾN CHO POPUP THANH TOÁN ---
+  isPaymentPopupVisible = false;
+  paymentData: any = {
+    orderId: '',
+    tableNumber: '',
+    subTotal: 0,       
+    discountCode: '',  
+    discountPercent: 0,
+    discountValue: 0,  
+    finalAmount: 0     
+  };
+
   constructor(
     private orderService: OrderService,
     private tableService: TableService,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private promotionService: PromotionService 
   ) {}
 
   ngOnInit() {
@@ -50,33 +80,37 @@ export class DatBanComponent implements OnInit {
     this.loadMenu();
   }
 
-  // --- 1. LOAD DỮ LIỆU ---
+  // =========================================================
+  // 1. LOAD DỮ LIỆU TỪ SERVER
+  // =========================================================
   loadData() {
     this.orderService.getOrders().subscribe((res) => {
         this.datBans = res.map((item: any) => ({
-            ...item, // Giữ lại các trường khác
-            id: item._id,
-            // 👇 MAP TÊN TIẾNG ANH (Server) -> TIẾNG VIỆT (HTML)
+            ...item, 
+            id: item._id, 
             maHoaDon: item.orderCode,   
             ngayDat: item.bookingDate,  
-            
-            // Các trường map cũ giữ nguyên
+            hoVaTen: item.customer, 
+            soBan: item.tableNumber,
+            soNguoi: item.peopleCount,
             trangThai: this.translateStatus(item.status),
             originalStatus: item.status
         }));
-        
-      });
+    });
   }
 
   loadMenu() {
     this.menuService.getMenu().subscribe((res) => {
-        this.fullMenu = res.map((m: any) => ({
+        // 👇 [SỬA] Lọc chỉ lấy món có trạng thái 'Hoạt động'
+        const activeItems = res.filter((item: any) => item.trangThai === 'Hoạt động');
+
+        this.fullMenu = activeItems.map((m: any) => ({
             ...m,
-            quantity: 1, // Mặc định số lượng 1
+            quantity: 1, // Mặc định số lượng 1 khi load lên
             selected: false
         }));
 
-        // Lấy danh sách danh mục unique
+        // Lấy danh sách danh mục duy nhất để tạo Tabs
         const categories = [...new Set(this.fullMenu.map(m => m.danhMuc))];
         this.menuCategories = [{ id: 0, text: 'Tất cả' }, ...categories.map((c, i) => ({ id: i + 1, text: c }))];
         
@@ -84,24 +118,80 @@ export class DatBanComponent implements OnInit {
     });
   }
 
-  // --- 2. LOGIC POPUP & CHỌN MÓN ---
-
-  // Mở Popup
-  openAddModal() {
-    this.isPopupVisible = true;
-    this.resetForm();
-    
-    // Reset menu về trạng thái chưa chọn
-    this.fullMenu.forEach(m => { m.selected = false; m.quantity = 1; });
-    this.filterMenu();
-
-    // Lấy bàn trống
-    this.tableService.getTables().subscribe((tables) => {
-        this.availableTables = tables.filter(t => t.trangThai === 'EMPTY' || t.trangThai === 'Trống');
-    });
+  loadAvailableTables() {
+      this.tableService.getTables().subscribe((tables: any[]) => {
+          this.availableTables = tables.filter((t: any)=> 
+              // Chỉ lấy bàn TRỐNG hoặc bàn CỦA CHÍNH ĐƠN HÀNG ĐANG SỬA
+              t.trangThai === 'EMPTY' || t.trangThai === 'Trống' || 
+              (this.isEditMode && t.tenBan == this.newOrder.tableNumber)
+          );
+      });
   }
 
-  // Xử lý tab danh mục
+  // =========================================================
+  // 2. LOGIC POPUP & FORM
+  // =========================================================
+
+  openAddModal() {
+    this.isEditMode = false;
+    this.isPopupVisible = true;
+    this.resetForm();
+    this.resetMenuSelection();
+    this.loadAvailableTables();
+  }
+
+  openEditModal(data: any) {
+    this.isEditMode = true;
+    this.editingId = data.id;
+    this.isPopupVisible = true;
+
+    // Đổ dữ liệu cũ vào form
+    this.newOrder = {
+        orderCode: data.maHoaDon,
+        customer: data.hoVaTen,
+        tableNumber: data.soBan,
+        peopleCount: data.soNguoi,
+        payment: data.payment,
+        orderFood: [],
+        totalAmount: data.totalAmount
+    };
+
+    this.selectedTableCapacity = 0; // Reset tạm, sẽ tự tìm lại sau
+    this.loadAvailableTables(); 
+
+    // --- MAP LẠI MÓN ĂN TỪ CHUỖI "Món (x2)" VỀ LIST SELECTED ---
+    this.resetMenuSelection(); 
+    if (data.orderFood && data.orderFood.length > 0) {
+        data.orderFood.forEach((foodStr: string) => {
+            const match = foodStr.match(/^(.+) \(x(\d+)\)$/);
+            if (match) {
+                const name = match[1];
+                const qty = parseInt(match[2]);
+                const menuItem = this.fullMenu.find(m => m.ten === name);
+                if (menuItem) {
+                    menuItem.selected = true;
+                    menuItem.quantity = qty;
+                }
+            }
+        });
+        this.calculateTotal(); 
+    }
+  }
+
+  openFoodModal(data: any) {
+    this.currentFoodView = data.orderFood || [];
+    this.isFoodPopupVisible = true;
+  }
+
+  // =========================================================
+  // 3. LOGIC CHỌN MÓN & TÍNH TIỀN
+  // =========================================================
+
+  resetMenuSelection() {
+    this.fullMenu.forEach(m => { m.selected = false; m.quantity = 1; });
+    this.filterMenu();
+  }
+
   onTabChange(e: any) {
     this.currentCategory = e.itemData.id;
     this.filterMenu();
@@ -116,7 +206,6 @@ export class DatBanComponent implements OnInit {
     }
   }
 
-  // Cập nhật khi tick chọn món hoặc đổi số lượng
   updateSelection(food: any) {
     this.calculateTotal();
   }
@@ -127,43 +216,72 @@ export class DatBanComponent implements OnInit {
     this.newOrder.totalAmount = foodTotal;
   }
 
-  selectTable(tableNumber: string) {
-    this.newOrder.tableNumber = tableNumber;
+  selectTable(table: any) {
+    this.newOrder.tableNumber = table.tenBan;
+    this.selectedTableCapacity = table.sucChua; 
   }
 
-  // --- 3. LƯU & XỬ LÝ TRẠNG THÁI ---
+  // =========================================================
+  // 4. LƯU (THÊM / SỬA) & CẬP NHẬT TRẠNG THÁI
+  // =========================================================
 
   saveOrder() {
+    // Validate cơ bản
     if (!this.newOrder.tableNumber) { alert("⚠️ Chưa chọn bàn!"); return; }
     if (!this.newOrder.customer) { alert("⚠️ Chưa nhập tên khách!"); return; }
+    if (this.newOrder.peopleCount <= 0) { alert("⚠️ Số người phải lớn hơn 0!"); return; }
+    
+    // --- KIỂM TRA SỨC CHỨA ---
+    let currentCapacity = this.selectedTableCapacity;
+    if (currentCapacity === 0 && this.newOrder.tableNumber) {
+        const foundTable = this.availableTables.find(t => t.tenBan == this.newOrder.tableNumber);
+        if (foundTable) currentCapacity = foundTable.sucChua;
+    }
 
-    // Tạo mảng món ăn dạng String: "Tên món (xSL)"
+    if (currentCapacity > 0 && this.newOrder.peopleCount > currentCapacity) {
+         alert(`⚠️ Bàn số ${this.newOrder.tableNumber} chỉ ngồi được tối đa ${currentCapacity} người!`);
+         return;
+    }
+
+    // Lấy danh sách món đã chọn
     const selectedItems = this.fullMenu.filter(m => m.selected);
+    if (selectedItems.length === 0) {
+        alert("⚠️ Vui lòng chọn ít nhất 1 món ăn!");
+        return;
+    }
+
     const orderFoodStrings = selectedItems.map(item => `${item.ten} (x${item.quantity})`);
 
     const payload = {
-        orderCode: this.newOrder.orderCode,
+        ...this.newOrder, 
         bookingDate: new Date(),
-        customer: this.newOrder.customer,
-        tableNumber: this.newOrder.tableNumber,
-        peopleCount: this.newOrder.peopleCount,
-        payment: this.newOrder.payment,
-        status: 'Waiting',
+        status: this.isEditMode ? undefined : 'Waiting', 
         orderFood: orderFoodStrings,
         totalAmount: this.newOrder.totalAmount
     };
 
-    this.orderService.addOrder(payload).subscribe({
-        next: () => {
-            alert("✅ Tạo đơn thành công!");
-            this.isPopupVisible = false;
-            this.loadData();
-        },
-        error: (err) => alert("❌ Lỗi: " + err.message)
-    });
+    if (this.isEditMode) {
+        this.orderService.updateOrder(this.editingId, payload).subscribe({
+            next: () => {
+                alert("✅ Cập nhật đơn hàng thành công!");
+                this.isPopupVisible = false;
+                this.loadData();
+            },
+            error: (err: any) => alert("Lỗi update: " + (err.error?.error || err.message))
+        });
+    } else {
+        this.orderService.createOrder(payload).subscribe({
+            next: () => {
+                alert("✅ Tạo đơn thành công!");
+                this.isPopupVisible = false;
+                this.loadData();
+            },
+            error: (err: any) => alert("Lỗi thêm: " + (err.error?.error || err.message))
+        });
+    }
   }
 
-  // Duyệt đơn -> CONFIRMED
+  // --- CÁC NÚT THAO TÁC TRẠNG THÁI ---
   duyet(data: any) {
     if(confirm('Duyệt đơn này và xếp bàn cho khách?')) {
         this.orderService.updateStatus(data.id || data._id, 'CONFIRMED').subscribe(() => {
@@ -173,7 +291,6 @@ export class DatBanComponent implements OnInit {
     }
   }
 
-  // Hủy đơn -> CANCELLED
   huy(data: any) {
       if(confirm('Bạn chắc chắn muốn hủy đơn này?')) {
         this.orderService.updateStatus(data.id || data._id, 'CANCELLED').subscribe(() => {
@@ -183,18 +300,82 @@ export class DatBanComponent implements OnInit {
       }
   }
 
-  // 👇 HÀM BỊ THIẾU CỦA BẠN ĐÂY 👇
-  // Hoàn thành -> COMPLETED (Thanh toán xong, trả bàn)
   hoanThanh(data: any) {
     if(confirm('Khách đã thanh toán và trả bàn?')) {
         this.orderService.updateStatus(data.id || data._id, 'COMPLETED').subscribe(() => {
             alert('✅ Đơn hàng hoàn tất! Bàn đã trống.');
-            this.loadData();
+            this.loadData();  
         });
     }
   }
 
-  // --- 4. HELPER ---
+  // =========================================================
+  // 5. LOGIC THANH TOÁN & KHUYẾN MÃI
+  // =========================================================
+
+  openPaymentPopup(data: any) {
+    this.paymentData = {
+        orderId: data.id,
+        tableNumber: data.soBan,
+        subTotal: data.totalAmount || 0,
+        discountCode: '',
+        discountPercent: 0,
+        discountValue: 0,
+        finalAmount: data.totalAmount || 0
+    };
+    this.isPaymentPopupVisible = true;
+  }
+
+  checkPromotion() {
+    if (!this.paymentData.discountCode || this.paymentData.discountCode.trim() === '') return;
+    
+    const codeToSend = this.paymentData.discountCode.trim();
+
+    this.promotionService.checkPromotion(codeToSend).subscribe({
+        next: (promo: any) => {
+            alert(`✅ Áp dụng mã: ${promo.code} - Giảm ${promo.discountPercent}%`);
+            
+            const percent = promo.discountPercent;
+            const moneyReduced = this.paymentData.subTotal * (percent / 100);
+
+            this.paymentData.discountPercent = percent;
+            this.paymentData.discountValue = moneyReduced;
+            this.paymentData.finalAmount = this.paymentData.subTotal - moneyReduced;
+        },
+        error: (err) => {
+            alert("❌ " + (err.error?.message || "Mã không hợp lệ!"));
+            this.paymentData.discountPercent = 0;
+            this.paymentData.discountValue = 0;
+            this.paymentData.finalAmount = this.paymentData.subTotal;
+        }
+    });
+  }
+
+  confirmPayment() {
+    const msg = `Xác nhận thanh toán đơn hàng này?\nThực thu: ${this.paymentData.finalAmount.toLocaleString()} VND`;
+    if (confirm(msg)) {
+        const payload = {
+            status: 'COMPLETED',
+            totalAmount: this.paymentData.finalAmount,
+            note: this.paymentData.discountCode 
+                  ? `Mã KM: ${this.paymentData.discountCode} (-${this.paymentData.discountPercent}%)` 
+                  : ''
+        };
+
+        this.orderService.updateOrder(this.paymentData.orderId, payload).subscribe({
+            next: () => {
+                alert("✅ Thanh toán thành công! Đơn hàng đã hoàn tất.");
+                this.isPaymentPopupVisible = false;
+                this.loadData(); // Load lại danh sách
+            },
+            error: (err: any) => alert("Lỗi thanh toán: " + err.message)
+        });
+    }
+  }
+
+  // =========================================================
+  // 6. CÁC HÀM BỔ TRỢ (HELPER)
+  // =========================================================
   resetForm() {
     const dateStr = new Date().toISOString().slice(0,10).replace(/-/g, "");
     const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
@@ -207,6 +388,7 @@ export class DatBanComponent implements OnInit {
         orderFood: [],
         totalAmount: 0
     };
+    this.selectedTableCapacity = 0; 
   }
 
   translateStatus(status: string): string {

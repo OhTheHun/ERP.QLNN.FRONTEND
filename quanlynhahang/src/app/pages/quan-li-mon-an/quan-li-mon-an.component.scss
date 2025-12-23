@@ -1,57 +1,165 @@
+// Container chính
 .page-container {
-    padding: 20px;
+  padding: 20px;
+  background-color: #f5f5f5; // Thêm màu nền nhẹ cho tách biệt
+  min-height: 100vh;
 }
 
+// Tiêu đề
 .title {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+  border-left: 5px solid #007bff; // Điểm nhấn trang trí
+  padding-left: 10px;
 }
 
+// Thanh nút bấm
 .btn-bar {
-    margin-top: 1px;
-    justify-content: flex-end;
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 15px;
 
-    dx-button {
-        button {
-            padding: 6px 15px;
-            border-radius: 6px;
-        }
-    }
+  // Tùy chỉnh nút DevExtreme
+  dx-button {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); // Đổ bóng nhẹ
+    border-radius: 4px;
+    overflow: hidden;
+  }
 }
 
-/* DataGrid */
+// Grid dữ liệu
 .product-grid {
-    border-radius: 10px;
-    padding: 10px;
-
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05); // Đổ bóng cho bảng nổi lên
+  padding: 15px;
+  
+  // Header của bảng đậm hơn chút
+  ::ng-deep .dx-datagrid-headers {
+    font-weight: 600;
+    color: #444;
+  }
 }
 
+/* =========================================
+   STYLE CHO TRẠNG THÁI (STATUS)
+   ========================================= */
 .status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .status-active,
 .status-inactive {
-    padding: 4px;
-    border-radius: 10px;
-    color: black;
-    width: 100%; 
-    text-align: center; 
+  padding: 5px 12px;
+  border-radius: 20px; // Bo tròn kiểu "pill" (thuốc con nhộng)
+  font-size: 13px;
+  font-weight: 500;
+  width: 120px; // Cố định chiều rộng để thẳng hàng
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .status-active {
-    background-color: green;
+  background-color: #d1e7dd; // Màu nền xanh nhạt
+  color: #0f5132;            // Chữ xanh đậm
+  border: 1px solid #badbcc;
 }
 
 .status-inactive {
-    background-color: red;
+  background-color: #f8d7da; // Màu nền đỏ nhạt
+  color: #842029;            // Chữ đỏ đậm
+  border: 1px solid #f5c2c7;
 }
 
+/* =========================================
+   STYLE CHO HÌNH ẢNH TRONG GRID
+   ========================================= */
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
 
+.grid-image {
+  width: 80px;         // Chiều rộng cố định
+  height: 60px;        // Chiều cao cố định
+  object-fit: cover;   // Cắt ảnh vừa khung, không méo
+  border-radius: 6px;  // Bo góc ảnh
+  cursor: pointer;     // Hiện bàn tay khi chỉ vào
+  border: 1px solid #eee;
+  transition: all 0.2s ease-in-out;
+
+  // Hiệu ứng khi di chuột vào ảnh nhỏ
+  &:hover {
+    transform: scale(1.1); // Phóng to nhẹ
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-color: #007bff;
+  }
+}
+
+.no-image {
+  font-size: 12px;
+  color: #aaa;
+  font-style: italic;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px dashed #ddd;
+}
+
+/* =========================================
+   STYLE CHO POPUP XEM ẢNH FULL
+   ========================================= */
+// Dùng ::ng-deep để ghi đè style của DevExtreme Popup
+::ng-deep .popup-image-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: transparent; // Nền trong suốt
+  padding: 0;
+  overflow: hidden;
+}
+
+.full-image {
+  max-width: 100%;
+  max-height: 85vh;    // Giới hạn chiều cao để không bị tràn màn hình
+  object-fit: contain; // Giữ nguyên tỉ lệ ảnh gốc
+  border-radius: 8px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.5); // Đổ bóng đậm tạo chiều sâu
+}
+
+// Tùy chỉnh giao diện Popup của DevExtreme cho giống Lightbox
+::ng-deep .dx-popup-wrapper > .dx-overlay-content {
+  background: transparent !important; // Xóa nền trắng mặc định của popup
+  box-shadow: none !important;        // Xóa bóng mặc định
+}
+
+::ng-deep .dx-popup-content {
+  padding: 0 !important; // Xóa padding mặc định
+}
+
+::ng-deep .dx-popup-title {
+    background: transparent !important;
+    border-bottom: none !important;
+    
+    // Nút đóng popup màu trắng cho dễ nhìn trên nền tối
+    .dx-closebutton {
+        color: white !important; 
+        background: rgba(0,0,0,0.5);
+        border-radius: 50%;
+        
+        &:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    }
+}
