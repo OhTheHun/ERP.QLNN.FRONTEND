@@ -1,11 +1,11 @@
 // ========================================================
-// 1. STYLE CHO DANH SÁCH BÀN (CODE CŨ CỦA BRO)
+// 1. STYLE CHO DANH S�CH B�N (CODE CU C?A BRO)
 // ========================================================
 
 .table-page {
     padding: 16px;
-    height: 100vh; // Đảm bảo full màn hình
-    background-color: #f4f6f8; // Thêm nền xám nhẹ cho nổi bật card
+    height: 100vh; // �?m b?o full m�n h�nh
+    background-color: #f4f6f8; // Th�m n?n x�m nh? cho n?i b?t card
 }
 
 .page-header {
@@ -31,7 +31,7 @@
 .table-grid {
     margin-top: 16px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); // Tự động co giãn responsive tốt hơn fix cứng 3 cột
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); // T? d?ng co gi�n responsive t?t hon fix c?ng 3 c?t
     gap: 20px;
 }
 
@@ -49,7 +49,7 @@
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
     }
 
-    // Hiệu ứng viền màu theo trạng thái
+    // Hi?u ?ng vi?n m�u theo tr?ng th�i
     &.status-booked { border-color: #f59e0b; }
     &.status-occupied { border-color: #2563eb; }
 }
@@ -61,7 +61,7 @@
     color: #4f7df3;
     font-weight: 700;
     font-size: 20px;
-    border-radius: 50%; // Đổi thành hình tròn nhìn cho mềm mại
+    border-radius: 50%; // �?i th�nh h�nh tr�n nh�n cho m?m m?i
     margin: 0 auto 12px;
     display: flex;
     align-items: center;
@@ -75,15 +75,15 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
 
-    &.empty { color: #6b7280; } // Trống
-    &.booked { color: #f59e0b; } // Đã đặt
-    &.occupied { color: #2563eb; } // Có khách
+    &.empty { color: #6b7280; } // Tr?ng
+    &.booked { color: #f59e0b; } // �� d?t
+    &.occupied { color: #2563eb; } // C� kh�ch
 }
 
 .table-price {
     font-weight: 600;
     margin: 8px 0;
-    color: #059669; // Màu xanh tiền tệ
+    color: #059669; // M�u xanh ti?n t?
     font-size: 16px;
 }
 
@@ -98,9 +98,9 @@
     display: flex;
     justify-content: center;
     gap: 8px;
-    flex-wrap: wrap; // Để nút không bị tràn nếu màn hình nhỏ
+    flex-wrap: wrap; // �? n�t kh�ng b? tr�n n?u m�n h�nh nh?
 
-    // Style lại nút bấm nhỏ gọn trong card
+    // Style l?i n�t b?m nh? g?n trong card
     ::ng-deep .dx-button {
         border-radius: 8px;
         font-size: 12px;
@@ -153,11 +153,11 @@
 }
 
 // ========================================================
-// 2. STYLE CHO POPUP ĐẶT MÓN (PHẦN MỚI THÊM)
+// 2. STYLE CHO POPUP �?T M�N (PH?N M?I TH�M)
 // ========================================================
 
 ::ng-deep .dx-popup-content {
-    padding: 0 !important; // Xóa padding mặc định của popup để full viền
+    padding: 0 !important; // X�a padding m?c d?nh c?a popup d? full vi?n
 }
 
 .popup-container {
@@ -165,9 +165,9 @@
     height: 100%;
     background-color: #f8f9fa;
 
-    // --- CỘT TRÁI (THÔNG TIN) ---
+    // --- C?T TR�I (TH�NG TIN) ---
     .left-panel {
-        flex: 0 0 420px; // Cố định chiều rộng
+        flex: 0 0 420px; // C? d?nh chi?u r?ng
         background: #fff;
         padding: 20px;
         display: flex;
@@ -191,16 +191,16 @@
                 gap: 10px;
                 margin-bottom: 10px;
                 
-                & > * { flex: 1; } // Các input chia đều chiều rộng
+                & > * { flex: 1; } // C�c input chia d?u chi?u r?ng
             }
         }
 
         .order-summary {
-            flex: 1; // Chiếm hết khoảng trống còn lại
+            flex: 1; // Chi?m h?t kho?ng tr?ng c�n l?i
             display: flex;
             flex-direction: column;
             
-            // Grid giỏ hàng
+            // Grid gi? h�ng
             ::ng-deep .dx-datagrid {
                 border: 1px solid #f3f4f6;
                 border-radius: 8px;
@@ -220,7 +220,7 @@
                 margin-bottom: 15px;
                 
                 span {
-                    color: #dc2626; // Màu đỏ cho tổng tiền
+                    color: #dc2626; // M�u d? cho t?ng ti?n
                     font-size: 22px;
                     font-weight: 700;
                 }
@@ -240,9 +240,9 @@
         }
     }
 
-    // --- CỘT PHẢI (MENU MÓN ĂN) ---
+    // --- C?T PH?I (MENU M�N AN) ---
     .right-panel {
-        flex: 1; // Chiếm phần còn lại
+        flex: 1; // Chi?m ph?n c�n l?i
         padding: 20px;
         display: flex;
         flex-direction: column;
@@ -252,12 +252,12 @@
             margin-bottom: 15px;
         }
 
-        // Tabs danh mục món
+        // Tabs danh m?c m�n
         .category-tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
-            overflow-x: auto; // Cho phép cuộn ngang nếu nhiều danh mục
+            overflow-x: auto; // Cho ph�p cu?n ngang n?u nhi?u danh m?c
             padding-bottom: 5px;
 
             .tab-item {
@@ -286,12 +286,12 @@
             }
         }
 
-        // Grid hiển thị món ăn
+        // Grid hi?n th? m�n an
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); // Tự động chia cột
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); // T? d?ng chia c?t
             gap: 15px;
-            padding-right: 5px; // Tránh thanh cuộn che mất
+            padding-right: 5px; // Tr�nh thanh cu?n che m?t
 
             .menu-item {
                 background: #fff;
@@ -306,7 +306,7 @@
                 &:hover {
                     transform: translateY(-3px);
                     box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-                    border-color: #565eef; // Viền sáng lên khi hover
+                    border-color: #565eef; // Vi?n s�ng l�n khi hover
 
                     .add-icon {
                         opacity: 1;
@@ -317,7 +317,7 @@
                 img {
                     width: 100%;
                     height: 110px;
-                    object-fit: cover; // Ảnh không bị méo
+                    object-fit: cover; // ?nh kh�ng b? m�o
                 }
 
                 .item-info {
@@ -330,7 +330,7 @@
                         margin-bottom: 4px;
                         white-space: nowrap;
                         overflow: hidden;
-                        text-overflow: ellipsis; // Cắt chữ nếu dài quá
+                        text-overflow: ellipsis; // C?t ch? n?u d�i qu�
                     }
 
                     .item-price {
@@ -340,7 +340,7 @@
                     }
                 }
 
-                // Nút cộng (+) hiện lên khi hover
+                // N�t c?ng (+) hi?n l�n khi hover
                 .add-icon {
                     position: absolute;
                     bottom: 10px;
@@ -353,7 +353,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    opacity: 0; // Ẩn mặc định
+                    opacity: 0; // ?n m?c d?nh
                     transform: scale(0.5);
                     transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                     box-shadow: 0 2px 5px rgba(0,0,0,0.2);

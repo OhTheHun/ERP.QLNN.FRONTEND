@@ -1,43 +1,43 @@
-// Container chính
+// Container ch�nh
 .page-container {
   padding: 20px;
-  background-color: #f5f5f5; // Thêm màu nền nhẹ cho tách biệt
+  background-color: #f5f5f5; // Th�m m�u n?n nh? cho t�ch bi?t
   min-height: 100vh;
 }
 
-// Tiêu đề
+// Ti�u d?
 .title {
   font-size: 24px;
   font-weight: 700;
   color: #333;
   margin-bottom: 20px;
-  border-left: 5px solid #007bff; // Điểm nhấn trang trí
+  border-left: 5px solid #007bff; // �i?m nh?n trang tr�
   padding-left: 10px;
 }
 
-// Thanh nút bấm
+// Thanh n�t b?m
 .btn-bar {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-bottom: 15px;
 
-  // Tùy chỉnh nút DevExtreme
+  // T�y ch?nh n�t DevExtreme
   dx-button {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); // Đổ bóng nhẹ
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); // �? b�ng nh?
     border-radius: 4px;
     overflow: hidden;
   }
 }
 
-// Grid dữ liệu
+// Grid d? li?u
 .product-grid {
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05); // Đổ bóng cho bảng nổi lên
+  box-shadow: 0 0 10px rgba(0,0,0,0.05); // �? b�ng cho b?ng n?i l�n
   padding: 15px;
   
-  // Header của bảng đậm hơn chút
+  // Header c?a b?ng d?m hon ch�t
   ::ng-deep .dx-datagrid-headers {
     font-weight: 600;
     color: #444;
@@ -45,7 +45,7 @@
 }
 
 /* =========================================
-   STYLE CHO TRẠNG THÁI (STATUS)
+   STYLE CHO TR?NG TH�I (STATUS)
    ========================================= */
 .status {
   display: flex;
@@ -57,28 +57,28 @@
 .status-active,
 .status-inactive {
   padding: 5px 12px;
-  border-radius: 20px; // Bo tròn kiểu "pill" (thuốc con nhộng)
+  border-radius: 20px; // Bo tr�n ki?u "pill" (thu?c con nh?ng)
   font-size: 13px;
   font-weight: 500;
-  width: 120px; // Cố định chiều rộng để thẳng hàng
+  width: 120px; // C? d?nh chi?u r?ng d? th?ng h�ng
   text-align: center;
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .status-active {
-  background-color: #d1e7dd; // Màu nền xanh nhạt
-  color: #0f5132;            // Chữ xanh đậm
+  background-color: #d1e7dd; // M�u n?n xanh nh?t
+  color: #0f5132;            // Ch? xanh d?m
   border: 1px solid #badbcc;
 }
 
 .status-inactive {
-  background-color: #f8d7da; // Màu nền đỏ nhạt
-  color: #842029;            // Chữ đỏ đậm
+  background-color: #f8d7da; // M�u n?n d? nh?t
+  color: #842029;            // Ch? d? d?m
   border: 1px solid #f5c2c7;
 }
 
 /* =========================================
-   STYLE CHO HÌNH ẢNH TRONG GRID
+   STYLE CHO H�NH ?NH TRONG GRID
    ========================================= */
 .image-container {
   display: flex;
@@ -89,17 +89,17 @@
 }
 
 .grid-image {
-  width: 80px;         // Chiều rộng cố định
-  height: 60px;        // Chiều cao cố định
-  object-fit: cover;   // Cắt ảnh vừa khung, không méo
-  border-radius: 6px;  // Bo góc ảnh
-  cursor: pointer;     // Hiện bàn tay khi chỉ vào
+  width: 80px;         // Chi?u r?ng c? d?nh
+  height: 60px;        // Chi?u cao c? d?nh
+  object-fit: cover;   // C?t ?nh v?a khung, kh�ng m�o
+  border-radius: 6px;  // Bo g�c ?nh
+  cursor: pointer;     // Hi?n b�n tay khi ch? v�o
   border: 1px solid #eee;
   transition: all 0.2s ease-in-out;
 
-  // Hiệu ứng khi di chuột vào ảnh nhỏ
+  // Hi?u ?ng khi di chu?t v�o ?nh nh?
   &:hover {
-    transform: scale(1.1); // Phóng to nhẹ
+    transform: scale(1.1); // Ph�ng to nh?
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     border-color: #007bff;
   }
@@ -116,43 +116,43 @@
 }
 
 /* =========================================
-   STYLE CHO POPUP XEM ẢNH FULL
+   STYLE CHO POPUP XEM ?NH FULL
    ========================================= */
-// Dùng ::ng-deep để ghi đè style của DevExtreme Popup
+// D�ng ::ng-deep d? ghi d� style c?a DevExtreme Popup
 ::ng-deep .popup-image-content {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: transparent; // Nền trong suốt
+  background-color: transparent; // N?n trong su?t
   padding: 0;
   overflow: hidden;
 }
 
 .full-image {
   max-width: 100%;
-  max-height: 85vh;    // Giới hạn chiều cao để không bị tràn màn hình
-  object-fit: contain; // Giữ nguyên tỉ lệ ảnh gốc
+  max-height: 85vh;    // Gi?i h?n chi?u cao d? kh�ng b? tr�n m�n h�nh
+  object-fit: contain; // Gi? nguy�n t? l? ?nh g?c
   border-radius: 8px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.5); // Đổ bóng đậm tạo chiều sâu
+  box-shadow: 0 0 25px rgba(0,0,0,0.5); // �? b�ng d?m t?o chi?u s�u
 }
 
-// Tùy chỉnh giao diện Popup của DevExtreme cho giống Lightbox
+// T�y ch?nh giao di?n Popup c?a DevExtreme cho gi?ng Lightbox
 ::ng-deep .dx-popup-wrapper > .dx-overlay-content {
-  background: transparent !important; // Xóa nền trắng mặc định của popup
-  box-shadow: none !important;        // Xóa bóng mặc định
+  background: transparent !important; // X�a n?n tr?ng m?c d?nh c?a popup
+  box-shadow: none !important;        // X�a b�ng m?c d?nh
 }
 
 ::ng-deep .dx-popup-content {
-  padding: 0 !important; // Xóa padding mặc định
+  padding: 0 !important; // X�a padding m?c d?nh
 }
 
 ::ng-deep .dx-popup-title {
     background: transparent !important;
     border-bottom: none !important;
     
-    // Nút đóng popup màu trắng cho dễ nhìn trên nền tối
+    // N�t d�ng popup m�u tr?ng cho d? nh�n tr�n n?n t?i
     .dx-closebutton {
         color: white !important; 
         background: rgba(0,0,0,0.5);
