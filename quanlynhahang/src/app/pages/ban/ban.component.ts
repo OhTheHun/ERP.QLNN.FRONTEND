@@ -284,7 +284,7 @@ export class BanComponent implements OnInit {
             this.paymentData.discountValue = moneyReduced;
             this.paymentData.finalAmount = this.paymentData.subTotal - moneyReduced;
         },
-        error: (err) => {
+        error: (err: { error: { message: any; }; }) => {
             alert("❌ " + (err.error?.message || "Mã không hợp lệ!"));
             this.paymentData.discountPercent = 0;
             this.paymentData.discountValue = 0;
