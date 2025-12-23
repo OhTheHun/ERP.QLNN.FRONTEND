@@ -33,10 +33,9 @@ export class AccountComponent implements OnInit {
   selectedRole: string | null = null;
   selectedStatus: string | null = null;
    vaiTro = [
-    'Admin',
-    'Staff', 
-    'Customer',
-    'Cashier'
+    'ADMIN',
+    'THUNGAN', 
+    'NHANVIEN',
   ];
 
 
