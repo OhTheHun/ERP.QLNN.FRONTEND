@@ -7,18 +7,12 @@
             [elementAttr]="{ class: 'btn-delete-selected' }">
         </dx-button>
 
-        <dx-button text="Thêm sản phẩm" type="success" (onClick)="onAdd()" [elementAttr]="{ class: 'btn-add-product' }">
-        </dx-button>
-
     </div>
 
     <!-- DataGrid -->
     <div style="overflow-x: auto; max-width: 100%;">
         <dx-data-grid [dataSource]="data" keyExpr="id" [showBorders]="true" class="product-grid"
-            (onSelectionChanged)="onSelectionChanged($event)" 
-            (onRowUpdated)="onRowUpdated($event)" 
-            (onRowInserted)="onRowInserted($event)"
-            (onRowRemoved)="onRowRemoved($event)">
+            (onSelectionChanged)="onSelectionChanged($event)">
             <dxo-group-panel [visible]="false"></dxo-group-panel>
             <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
 

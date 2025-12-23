@@ -1,137 +1,51 @@
-import { Component, OnInit } from '@angular/core';
+import { DxButtonModule, DxDataGridModule, DxTemplateModule } from "devextreme-angular";
+import { Component } from '@angular/core';
+import { DxFormModule } from "devextreme-angular";
 import { CommonModule } from "@angular/common";
-import { HttpClientModule } from '@angular/common/http'; 
-import { DxButtonModule, DxDataGridModule, DxTemplateModule, DxFormModule } from "devextreme-angular";
-
-// 👇 ĐÃ ĐỔI THÀNH MENU SERVICE
-import { MenuService } from '../../shared/services/menu.service'; 
-
-@Component({
-    selector: 'app-quan-li-mon-an',
+@Component ({
     templateUrl: 'quan-li-mon-an.component.html',
     styleUrls: ['./quan-li-mon-an.component.scss'],
     standalone: true,
-    imports: [DxFormModule, DxDataGridModule, DxButtonModule, CommonModule, DxTemplateModule, HttpClientModule],
-    providers: [MenuService] // 👇 ĐÃ ĐỔI PROVIDER
+    imports: [DxFormModule, DxDataGridModule, DxButtonModule, CommonModule, DxTemplateModule, DxDataGridModule],
 })
-export class QuanLiMonAnComponent implements OnInit {
 
-    danhMucList = ['Cơm', 'Món nước', 'Món khô', 'Rice', 'Noodle']; 
+export class QuanLiMonAnComponent {
+    min = 0;
+    danhMucList = ['Cơm', 'Món nước', 'Món khô'];
     trangThaiOptions = ['Hoạt động', 'Ngừng hoạt động'];
 
-    data: any[] = []; 
-    selectedRows: any[] = [];
-
-    // 👇 ĐÃ ĐỔI TÊN BIẾN INJECT
-    constructor(private menuService: MenuService) {}
-
-    ngOnInit() {
-        this.loadData();
+    data = [
+        { id: 1, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Hoạt động", gia: 70000, hinhAnh: "https://cdnv2.tgdd.vn/mwg-static/common/Common/khhruf.jpg" },
+        { id: 2, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Ngừng hoạt động", gia: 70000, hinhAnh: "" },
+        { id: 3, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Hoạt động", gia: 70000, hinhAnh: "" },
+        { id: 4, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Hoạt động", gia: 70000, hinhAnh: "" },
+        { id: 1, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Hoạt động", gia: 70000, hinhAnh: "https://cdnv2.tgdd.vn/mwg-static/common/Common/khhruf.jpg" },
+        { id: 2, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Ngừng hoạt động", gia: 70000, hinhAnh: "" },
+        { id: 3, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Hoạt động", gia: 70000, hinhAnh: "" },
+        { id: 4, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Hoạt động", gia: 70000, hinhAnh: "" },
+        { id: 1, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Hoạt động", gia: 70000, hinhAnh: "https://cdnv2.tgdd.vn/mwg-static/common/Common/khhruf.jpg" },
+        { id: 2, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Ngừng hoạt động", gia: 70000, hinhAnh: "" },
+        { id: 3, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Hoạt động", gia: 70000, hinhAnh: "" },
+        { id: 4, ten: "Cơm bò gyudon", danhMuc: "Cơm", trangThai: "Hoạt động", gia: 70000, hinhAnh: "" }
+    ];
+    onAdd() {
+        console.log("Thêm sản phẩm");
     }
 
-    // Hàm load dữ liệu
-    loadData() {
-        // 👇 ĐÃ ĐỔI HÀM getFoods() -> getMenu()
-        this.menuService.getMenu().subscribe({
-            next: (res) => {
-                this.data = res;
-                console.log("✅ Đã tải Menu:", res);
-            },
-            error: (err) => console.error("❌ Lỗi tải Menu:", err)
-        });
+    onDeleteTemp() {
+        console.log("Sản phẩm tạm xóa");
     }
-
-    // 1. Thêm mới (Row Insertion)
-    onRowInserted(e: any) {
-        const monMoi = e.data; 
-        console.log("Đang thêm món mới:", monMoi);
-
-        // 👇 ĐÃ ĐỔI HÀM addFood() -> addMenu()
-        this.menuService.addMenu(monMoi).subscribe({
-            next: (res) => {
-                console.log("✅ Thêm thành công:", res);
-                this.loadData(); 
-            },
-            error: (err) => {
-                alert("❌ Lỗi thêm mới: " + err.message);
-                this.loadData(); 
-            }
-        });
-    }
-
-    // 2. Sửa (Row Update)
-    onRowUpdated(e: any) {
-        const id = e.key;
-        const updatedData = e.data;
-
-        console.log("Đang lưu chỉnh sửa:", id, updatedData);
-
-        // 👇 ĐÃ ĐỔI HÀM updateFood() -> updateMenu()
-        this.menuService.updateMenu(id, updatedData).subscribe({
-            next: () => {
-                console.log("✅ Cập nhật thành công!");
-            },
-            error: (err) => {
-                alert("❌ Lỗi cập nhật: " + err.message);
-                this.loadData(); 
-            }
-        });
-    }
-
-    // 3. Xóa 1 dòng (Thùng rác)
-    onRowRemoved(e: any) {
-        const id = e.data.id; 
-        console.log("Đang xóa món:", id);
-
-        // 👇 ĐÃ ĐỔI HÀM deleteFoods() -> deleteMenu()
-        this.menuService.deleteMenu([id]).subscribe({
-            next: () => {
-                console.log("✅ Đã xóa thành công trên Server!");
-            },
-            error: (err) => {
-                alert("❌ Lỗi xóa: " + err.message);
-                this.loadData(); 
-            }
-        });
-    }
-
-    // 4. Xóa nhiều
-    deleteSelected() {
-        if (this.selectedRows.length === 0) {
-            alert("Bro chưa chọn món nào để xóa cả!");
-            return;
-        }
-        
-        if (confirm(`Bro có chắc muốn xóa ${this.selectedRows.length} món này không?`)) {
-            const selectedIds = this.selectedRows.map(x => x.id);
-            
-            // 👇 ĐÃ ĐỔI HÀM deleteFoods() -> deleteMenu()
-            this.menuService.deleteMenu(selectedIds).subscribe({
-                next: () => {
-                    alert("✅ Đã xóa thành công!");
-                    this.loadData();
-                    this.selectedRows = [];
-                },
-                error: (err) => alert("❌ Lỗi xóa: " + err.message)
-            });
-        }
-    }
+    selectedRows: any[] = []; 
 
     onSelectionChanged(event: any) {
-        this.selectedRows = event.selectedRowsData;
+    this.selectedRows = event.selectedRowsData;
     }
 
-    // Nút thêm test (Giữ lại nếu thích)
-    onAdd() {
-        const monMoi = {
-            ten: "Món Test Menu " + Math.floor(Math.random() * 100),
-            danhMuc: "Cơm",
-            gia: 55000,
-            trangThai: "Hoạt động",
-            hinhAnh: ""
-        };
-        // 👇 ĐÃ ĐỔI HÀM addMenu
-        this.menuService.addMenu(monMoi).subscribe(() => this.loadData());
+    deleteSelected() {
+    if (this.selectedRows.length === 0) return;
+    const selectedIds = this.selectedRows.map(x => x.id);
+    this.data = this.data.filter(item => !selectedIds.includes(item.id));
+    this.selectedRows = [];
     }
 
 }
