@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
   @Input()
   title!: string;
 
-  user: IUser | null = { email: '', role: ' ' };
+  user: IUser | null = null;
 
   userMenuItems = [{
     text: 'Profile',

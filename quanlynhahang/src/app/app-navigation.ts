@@ -26,7 +26,7 @@ export const navigation = [
       {
         text: 'Đặt bàn',
         path: '/admin/dat-ban',
-        roles: ['ADMIN', 'NHANVIEN', 'THUNGAN']
+        roles: ['ADMIN', 'THUNGAN']
       }
     ]
   },
@@ -34,7 +34,7 @@ export const navigation = [
     text: 'Tài khoản',
     path: '/admin/tai-khoan',
     icon: 'group',
-    roles: ['ADMIN']
+    roles: ['ADMIN',]
   },
   {
     text: 'Quản lí vai trò',

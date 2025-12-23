@@ -12,7 +12,12 @@
     <!-- GRID -->
     <div class="grid-wrapper">
         <dx-data-grid [dataSource]="users" keyExpr="id" [showBorders]="true" [columnAutoWidth]="true"
-            [selection]="{ mode: 'multiple' }">
+            [selection]="{ mode: 'multiple' }"
+            (onSelectionChanged)="onSelectionChanged($event)" 
+            (onRowUpdated)="onRowUpdated($event)" 
+            (onRowInserted)="onRowInserted($event)"
+            (onRowRemoved)="onRowRemoved($event)">
+            
             <!-- SEARCH / FILTER / PAGING -->
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-paging [pageSize]="5"></dxo-paging>
@@ -20,7 +25,7 @@
             </dxo-pager>
 
             <!-- EDITING  -->
-            <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true">
+            <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true">
             </dxo-editing>
             <!-- Paging, Filtering -->
             <dxo-paging [pageSize]="5"></dxo-paging>
@@ -28,13 +33,13 @@
                 infoText="Trang {0}/{1} ({2} sản phẩm)">
             </dxo-pager>
 
-            <dxi-column caption="Hình ảnh" width="100" cellTemplate="hinhAnhCellTemplate">
+            <!--<dxi-column caption="Hình ảnh" width="100" cellTemplate="hinhAnhCellTemplate">
             </dxi-column>
 
             <div *dxTemplate="let data of 'hinhAnhCellTemplate'">
                 <img *ngIf="data.data.hinhAnh" [src]="data.data.hinhAnh" height="80"
                     style="border-radius: 8px; object-fit: cover;">
-            </div>
+            </div>-->
 
             <dxi-column dataField="ten" caption="Tên người dùng"
                 [validationRules]="[{ type: 'required', message: 'Tên người dùng không được để trống' }]">
@@ -53,19 +58,26 @@
             </dxi-column>
 
             <!-- VAI TRÒ -->
-            <dxi-column dataField="vaiTro" caption="Loại người dùng" cellTemplate="vaiTroCellTemplate"
+            <!--<dxi-column dataField="vaiTro" caption="Loại người dùng" cellTemplate="vaiTroCellTemplate"
                 [validationRules]="[{ type: 'required', message: 'Vui lòng chọn vai trò' }]">
-                <dxo-lookup [dataSource]="vaiTros" valueExpr="id" displayExpr="name">
+                <dxo-lookup [dataSource]="vaiTro" valueExpr='' displayExpr="name">
                 </dxo-lookup>
+            </dxi-column>-->
+            <dxi-column dataField="vaiTro" caption="Loại người dùng" cellTemplate="vaiTroCellTemplate">
+                <dxo-lookup [dataSource]="vaiTro"> 
+                    </dxo-lookup>
             </dxi-column>
 
             <!-- TRẠNG THÁI -->
-            <dxi-column dataField="trangThai" caption="Trạng thái" cellTemplate="trangThaiCellTemplate"
+            <!--<dxi-column dataField="trangThai" caption="Trạng thái" cellTemplate="trangThaiCellTemplate"
                 [validationRules]="[{ type: 'required', message: 'Vui lòng chọn trạng thái' }]">
-                <dxo-lookup [dataSource]="trangThais" valueExpr="id" displayExpr="name">
+                <dxo-lookup [dataSource]="trangThai" valueExpr=''  displayExpr="name">
                 </dxo-lookup>
+            </dxi-column>-->
+            <dxi-column dataField="trangThai" caption="Trạng thái" cellTemplate="trangThaiCellTemplate">
+                <dxo-lookup [dataSource]="trangThai"> 
+                    </dxo-lookup>
             </dxi-column>
-
 
             <!-- Template -->
             <div *dxTemplate="let data of 'trangThaiCellTemplate'">
@@ -80,10 +92,9 @@
             <div *dxTemplate="let data of 'vaiTroCellTemplate'">
                 <div class="status">
                     <span [ngClass]="
-                            data.data?.vaiTro === 'Khách hàng' ? 'status-khachhang' :
-                            data.data?.vaiTro === 'Thu ngân' ? 'status-thungan' :
-                            data.data?.vaiTro === 'Nhân viên' ? 'status-nhanvien' :
-                            data.data?.vaiTro === 'Admin' ? 'status-admin' : ''">
+                            data.data?.vaiTro === 'THUNGAN' ? 'status-thungan' :
+                            data.data?.vaiTro === 'NHANVIEN' ? 'status-nhanvien' :
+                            data.data?.vaiTro === 'ADMIN' ? 'status-admin' : ''">
                         {{ data.data?.vaiTro }}
                     </span>
                 </div>
