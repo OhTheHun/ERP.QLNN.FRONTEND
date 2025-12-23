@@ -92,10 +92,9 @@
             <div *dxTemplate="let data of 'vaiTroCellTemplate'">
                 <div class="status">
                     <span [ngClass]="
-                            data.data?.vaiTro === 'Customer' ? 'status-khachhang' :
-                            data.data?.vaiTro === 'Cashier' ? 'status-thungan' :
-                            data.data?.vaiTro === 'Staff' ? 'status-nhanvien' :
-                            data.data?.vaiTro === 'Manager' ? 'status-admin' : ''">
+                            data.data?.vaiTro === 'THUNGAN' ? 'status-thungan' :
+                            data.data?.vaiTro === 'NHANVIEN' ? 'status-nhanvien' :
+                            data.data?.vaiTro === 'ADMIN' ? 'status-admin' : ''">
                         {{ data.data?.vaiTro }}
                     </span>
                 </div>

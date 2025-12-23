@@ -5,7 +5,7 @@ import { DxFormModule } from 'devextreme-angular/ui/form';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
-import { AuthService } from '../../services';
+import { AuthService } from '../../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -19,14 +19,16 @@ import { HttpClientModule } from '@angular/common/http';
     DxFormModule,
     DxButtonModule,
     DxLoadIndicatorModule,
-    HttpClientModule
+    //HttpClientModule
   ]
 })
 export class LoginFormComponent {
   loading = false;
   formData: any = {};
-
-  constructor(private authService: AuthService, private router: Router) { }
+  profile: any={};
+  constructor(private authService: AuthService, private router: Router) { 
+    //this.profile=authService.profile;
+  }
 
   async onSubmit(e: Event) {
     e.preventDefault();
@@ -34,9 +36,9 @@ export class LoginFormComponent {
     this.loading = true;
 
     const result = await this.authService.logIn(email, password);
-    this.loading=false;
+    //this.loading=false;
     if (!result.isOk) {
-      //this.loading = false;
+      this.loading = false;
       notify(result.message, 'error', 2000);
     }
   }

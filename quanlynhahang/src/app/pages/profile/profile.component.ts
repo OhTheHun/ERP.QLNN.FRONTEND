@@ -31,7 +31,7 @@ export class ProfileComponent {
   imageUrlPattern = /^https?:\/\/.*\.jpe?g$/i;
   isEditing = false;
   imageUrlInput = '';
-
+  
   employee = {
     Picture: 'https://guchat.vn/wp-content/uploads/2025/04/Meme-Cho-5-1.jpg',
     Notes: 'Là một nhân viên chăm chỉ, nhiệt tình và luôn sẵn sàng giúp đỡ đồng nghiệp.',

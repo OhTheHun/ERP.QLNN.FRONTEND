@@ -1,21 +1,29 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-import { BehaviorSubject } from 'rxjs'; 
+import { BehaviorSubject , lastValueFrom} from 'rxjs'; 
 
 import { HttpClient } from '@angular/common/http';
 
 export interface IUser {
   email: string;
   role: 'ADMIN' | 'NHANVIEN' | 'THUNGAN'| ' ';
-  avatarUrl?: string;
+  //avatarUrl?: string;
 }
-
+export interface ProfleUser {
+    _id: string;
+    fullName: string;
+    passWord: string; // Lưu ý: Trường này thường không nên có ở Frontend
+    role: string;
+    status: string;
+    email: string;
+    phoneNumber: string;
+}
 const defaultPath = '/';
 
 const defaultUser: IUser = {
   email: '',
   role: 'ADMIN',
-  avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
+  //avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
 };
 
 @Injectable({
@@ -46,7 +54,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {
     //check role user
     const savedUser = localStorage.getItem('user');
-    if (savedUser) {
+    if (savedUser && savedUser !== 'undefined' && savedUser !== 'null') {
       this._user = JSON.parse(savedUser) as IUser; 
       if (!this._user.role) {
         this._user.role = 'THUNGAN'; // đổi role ở đây
@@ -60,36 +68,52 @@ export class AuthService {
     }
   }
 
-  async logIn(email: string, password: string) {
-    try {
-      // GÁN CỨNG ROLE TEST
-      const response: any = await this.http.post(`${this.apiUrl}/login`, { email, password })
-      const role: 'ADMIN' | 'NHANVIEN' | 'THUNGAN' = 'ADMIN'; // thay khi có API
-      this._user = { ...defaultUser, email, role };
-      this.userSubject.next(this._user);
-      localStorage.setItem('user', JSON.stringify(this._user));
+ // Trong auth.service.ts
+async logIn(email: string, password: string): Promise<{ isOk: boolean; data?: IUser; message?: string }> {
+    try {
+      const response: any = await lastValueFrom(
+            this.http.post<any>(`${this.apiUrl}/login`, { email, password })
+        );
+      
+      if (response.isOk) {
+        const apiUser = response.user;
+            
+            // 1. Ánh xạ dữ liệu trả về từ API vào interface IUser
+            const loggedInUser: IUser = {
+                email: apiUser.email,
+                role: apiUser.vaiTro , 
+               
+            };
+            this._user =loggedInUser; 
+            this.userSubject.next(this._user);
+            localStorage.setItem('user', JSON.stringify(this._user));
 
-      this.router.navigate([this._lastAuthenticatedPath]);
+            // 2. Chuyển hướng
+            this.router.navigate([this._lastAuthenticatedPath]);
 
+            return {
+                isOk: true,
+                data: this._user
+            };
+      }
+
+      // ✅ THÊM LỆNH RETURN CUỐI CÙNG TRONG TRY:
+      // Xử lý khi API trả về 200 OK, nhưng isOk: false (ví dụ: mật khẩu sai)
       return {
-        isOk: true,
-        data: this._user
+          isOk: false,
+          message: response.message || 'Xác thực thất bại (API báo lỗi)'
       };
-      /*const response: any = await this.http.post(`${this.apiUrl}/login`, { email, password }).toPromise();
-      this._user = response.user;
-      this.userSubject.next(this._user);
-      localStorage.setItem('user', JSON.stringify(this._user));
 
-      this.router.navigate(['/dashboard']);
-      return { isOk: true, data: this._user };*/
-    }
-    catch {
-      return {
-        isOk: false,
-        message: 'Xác thực không thành công'
-      };
-    }
-  }
+    }
+    catch(error: any) { // ✅ Nên đặt kiểu cho error để truy cập thuộc tính nếu cần
+      return {
+        isOk: false,
+        // Cố gắng lấy thông báo lỗi chi tiết từ HTTP response nếu có
+        message: error.error?.message || 'Xác thực không thành công'
+      };
+    }
+}
+  
 
   async getUser() {
     return {
