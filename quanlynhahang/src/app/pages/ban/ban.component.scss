@@ -1,0 +1,364 @@
+// ========================================================
+// 1. STYLE CHO DANH SÁCH BÀN (CODE CU C?A BRO)
+// ========================================================
+
+.table-page {
+    padding: 16px;
+    height: 100vh; // Ð?m b?o full màn hình
+    background-color: #f4f6f8; // Thêm n?n xám nh? cho n?i b?t card
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h2 {
+        margin: 0;
+        font-weight: 700;
+        color: #333;
+    }
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.table-grid {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); // T? d?ng co giãn responsive t?t hon fix c?ng 3 c?t
+    gap: 20px;
+}
+
+.table-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid transparent;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    // Hi?u ?ng vi?n màu theo tr?ng thái
+    &.status-booked { border-color: #f59e0b; }
+    &.status-occupied { border-color: #2563eb; }
+}
+
+.table-number {
+    width: 60px;
+    height: 60px;
+    background: #eef2ff;
+    color: #4f7df3;
+    font-weight: 700;
+    font-size: 20px;
+    border-radius: 50%; // Ð?i thành hình tròn nhìn cho m?m m?i
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-status {
+    font-weight: 700;
+    margin: 8px 0;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &.empty { color: #6b7280; } // Tr?ng
+    &.booked { color: #f59e0b; } // Ðã d?t
+    &.occupied { color: #2563eb; } // Có khách
+}
+
+.table-price {
+    font-weight: 600;
+    margin: 8px 0;
+    color: #059669; // Màu xanh ti?n t?
+    font-size: 16px;
+}
+
+.table-capacity {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-bottom: 15px;
+}
+
+.table-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap; // Ð? nút không b? tràn n?u màn hình nh?
+
+    // Style l?i nút b?m nh? g?n trong card
+    ::ng-deep .dx-button {
+        border-radius: 8px;
+        font-size: 12px;
+        
+        .dx-button-content {
+            padding: 6px 12px;
+        }
+    }
+}
+
+.pagination {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+
+    button {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 500;
+
+        &:hover:not(:disabled) {
+            background-color: #f3f4f6;
+        }
+
+        &.active {
+            background: #2563eb;
+            color: #fff;
+            border-color: #2563eb;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.btn-add-ban-an {
+    border-radius: 8px;
+    background-color: #565eef;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(86, 94, 239, 0.2);
+}
+
+// ========================================================
+// 2. STYLE CHO POPUP Ð?T MÓN (PH?N M?I THÊM)
+// ========================================================
+
+::ng-deep .dx-popup-content {
+    padding: 0 !important; // Xóa padding m?c d?nh c?a popup d? full vi?n
+}
+
+.popup-container {
+    display: flex;
+    height: 100%;
+    background-color: #f8f9fa;
+
+    // --- C?T TRÁI (THÔNG TIN) ---
+    .left-panel {
+        flex: 0 0 420px; // C? d?nh chi?u r?ng
+        background: #fff;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #e5e7eb;
+
+        h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1f2937;
+            border-left: 4px solid #565eef;
+            padding-left: 10px;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+            
+            .form-row {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 10px;
+                
+                & > * { flex: 1; } // Các input chia d?u chi?u r?ng
+            }
+        }
+
+        .order-summary {
+            flex: 1; // Chi?m h?t kho?ng tr?ng còn l?i
+            display: flex;
+            flex-direction: column;
+            
+            // Grid gi? hàng
+            ::ng-deep .dx-datagrid {
+                border: 1px solid #f3f4f6;
+                border-radius: 8px;
+            }
+        }
+
+        .footer-actions {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px dashed #e5e7eb;
+
+            .total-display {
+                font-size: 18px;
+                font-weight: 600;
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                
+                span {
+                    color: #dc2626; // Màu d? cho t?ng ti?n
+                    font-size: 22px;
+                    font-weight: 700;
+                }
+            }
+
+            .buttons {
+                display: flex;
+                gap: 10px;
+
+                dx-button {
+                    flex: 1;
+                    height: 45px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    // --- C?T PH?I (MENU MÓN AN) ---
+    .right-panel {
+        flex: 1; // Chi?m ph?n còn l?i
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        background-color: #f3f4f6;
+
+        .menu-header {
+            margin-bottom: 15px;
+        }
+
+        // Tabs danh m?c món
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            overflow-x: auto; // Cho phép cu?n ngang n?u nhi?u danh m?c
+            padding-bottom: 5px;
+
+            .tab-item {
+                padding: 8px 16px;
+                background: #fff;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: 500;
+                color: #6b7280;
+                cursor: pointer;
+                white-space: nowrap;
+                border: 1px solid #e5e7eb;
+                transition: all 0.2s;
+
+                &:hover {
+                    border-color: #565eef;
+                    color: #565eef;
+                }
+
+                &.active {
+                    background: #565eef;
+                    color: #fff;
+                    border-color: #565eef;
+                    box-shadow: 0 2px 5px rgba(86, 94, 239, 0.3);
+                }
+            }
+        }
+
+        // Grid hi?n th? món an
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); // T? d?ng chia c?t
+            gap: 15px;
+            padding-right: 5px; // Tránh thanh cu?n che m?t
+
+            .menu-item {
+                background: #fff;
+                border-radius: 12px;
+                overflow: hidden;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                position: relative;
+                border: 2px solid transparent;
+
+                &:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+                    border-color: #565eef; // Vi?n sáng lên khi hover
+
+                    .add-icon {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+
+                img {
+                    width: 100%;
+                    height: 110px;
+                    object-fit: cover; // ?nh không b? méo
+                }
+
+                .item-info {
+                    padding: 10px;
+
+                    .item-name {
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #374151;
+                        margin-bottom: 4px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis; // C?t ch? n?u dài quá
+                    }
+
+                    .item-price {
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: #059669;
+                    }
+                }
+
+                // Nút c?ng (+) hi?n lên khi hover
+                .add-icon {
+                    position: absolute;
+                    bottom: 10px;
+                    right: 10px;
+                    width: 30px;
+                    height: 30px;
+                    background: #565eef;
+                    color: #fff;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    opacity: 0; // ?n m?c d?nh
+                    transform: scale(0.5);
+                    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                }
+            }
+        }
+    }
+}

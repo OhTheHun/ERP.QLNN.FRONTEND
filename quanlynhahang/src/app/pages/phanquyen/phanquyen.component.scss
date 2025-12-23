@@ -1,0 +1,40 @@
+.page-container {
+  padding: 16px;
+}
+
+.header h3 {
+  margin-top: 0 !important;
+  margin-bottom: 12px !important;
+}
+
+.top-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/*  TABLE  */
+.permission-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border: 1px solid #e0e0e0; 
+}
+
+.permission-table th,
+.permission-table td {
+  text-align: center;
+  padding: 10px;
+  border: 2px solid black; 
+}
+
+.permission-table th {
+  background: #f5f6fa;
+  font-weight: 600;
+}
+
+.action-col {
+  text-align: left;
+  font-weight: 500;
+}

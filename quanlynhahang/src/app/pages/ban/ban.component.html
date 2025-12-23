@@ -1,0 +1,228 @@
+<div class="table-page">
+
+  <div class="page-header">
+    <h2>Quản lý bàn ăn</h2>
+  </div>
+  
+  <div class="actions">
+    <dx-date-box [(value)]="selectedDate" width="200"></dx-date-box>
+    <dx-button text="Thêm bàn ăn" width="150" [elementAttr]="{ class: 'btn-add-ban-an' }"></dx-button>
+  </div>
+
+  <div class="table-grid">
+    <div class="table-card" *ngFor="let table of pagedTables" 
+         [ngClass]="{
+            'status-occupied': table.trangThai === 'OCCUPIED',
+            'status-booked': table.trangThai === 'BOOKED'
+         }">
+
+      <div class="table-number">
+        {{ table.tenBan }}
+      </div>
+
+      <div class="table-status" [ngClass]="getStatusClass(table.trangThai)">
+        {{ getStatusLabel(table.trangThai) }}
+      </div>
+
+      <div *ngIf="table.tongTien" class="table-price">
+        {{ table.tongTien | number }} VND
+      </div>
+
+      <div class="table-capacity">
+        Sức chứa: {{ table.sucChua }} người
+      </div>
+
+      <div class="table-actions">
+        <dx-button 
+            text="Đặt món" 
+            type="success" 
+            stylingMode="outlined"
+            (onClick)="openOrderPopup(table)"
+            [disabled]="table.trangThai !== 'EMPTY'">
+        </dx-button>
+
+        <dx-button 
+            text="Sửa món" 
+            type="default" 
+            stylingMode="outlined"
+            (onClick)="openEditPopup(table)"
+            [disabled]="table.trangThai === 'EMPTY'">
+        </dx-button>
+
+        <dx-button 
+            text="Thanh toán" 
+            type="danger" 
+            stylingMode="outlined"
+            (onClick)="openPaymentPopup(table)"
+            [disabled]="table.trangThai === 'EMPTY'">
+        </dx-button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="pagination">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
+    <button *ngFor="let _ of [].constructor(totalPages); let i = index" (click)="changePage(i + 1)"
+      [class.active]="currentPage === i + 1">
+      {{ i + 1 }}
+    </button>
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
+  </div>
+
+</div>
+
+<dx-popup
+  [(visible)]="isPopupVisible"
+  [title]="popupTitle"
+  [width]="1100"
+  [height]="750"
+  [showCloseButton]="true"
+  [dragEnabled]="false">
+  
+  <div *dxTemplate="let data of 'content'">
+    <div class="popup-container">
+      
+      <div class="left-panel">
+        <div class="info-section">
+          <h4>Thông tin bàn</h4>
+          <div class="form-row">
+            <dx-text-box 
+                placeholder="Tên khách hàng (*)" 
+                [(value)]="bookingData.customer"
+                [showClearButton]="true">
+            </dx-text-box>
+            <dx-text-box 
+                placeholder="SĐT (Tùy chọn)" 
+                [(value)]="bookingData.phone">
+            </dx-text-box>
+          </div>
+          
+          <div class="form-row">
+            <dx-text-box [value]="'Bàn số: ' + bookingData.tableNumber" [readOnly]="true"></dx-text-box>
+            <dx-number-box placeholder="Số người" [(value)]="bookingData.peopleCount" [min]="1" [max]="20"></dx-number-box>
+          </div>
+        </div>
+
+        <div class="order-summary">
+          <h4>Món đang gọi</h4>
+          <dx-data-grid 
+            [dataSource]="selectedItems" 
+            [showBorders]="true" 
+            height="100%">
+            
+            <dxi-column dataField="itemName" caption="Tên món" [allowEditing]="false"></dxi-column>
+            
+            <dxi-column dataField="quantity" caption="SL" width="60" alignment="center">
+            </dxi-column>
+            
+            <dxi-column caption="Tiền" alignment="right" cellTemplate="totalTpl" width="90"></dxi-column>
+            <div *dxTemplate="let cell of 'totalTpl'">
+                {{ (cell.data.price * cell.data.quantity) | number }}
+            </div>
+
+            <dxi-column type="buttons" width="50">
+              <dxi-button icon="trash" [onClick]="removeitem"></dxi-button>
+            </dxi-column>
+
+            <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+          </dx-data-grid>
+        </div>
+
+        <div class="footer-actions">
+            <div class="total-display">Tổng cộng: <span>{{ calculateTotal() | number }} VND</span></div>
+            <div class="buttons">
+                <dx-button text="Lên món / Lưu đơn" icon="save" type="success" (onClick)="saveOrder()"></dx-button>
+                <dx-button text="Đóng" icon="close" (onClick)="isPopupVisible = false"></dx-button>
+            </div>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div class="menu-header">
+            <dx-text-box mode="search" placeholder="Tìm món ăn..." (onValueChanged)="onSearchMenu($event)" [showClearButton]="true"></dx-text-box>
+        </div>
+        <div class="category-tabs">
+            <div class="tab-item" *ngFor="let cat of categories" [class.active]="selectedCategory === cat" (click)="filterByCategory(cat)">{{ cat }}</div>
+        </div>
+        <dx-scroll-view height="520">
+            <div class="menu-grid">
+                <div class="menu-item" *ngFor="let item of filteredMenu" (click)="addToOrder(item)">
+                    <img [src]="item.hinhAnh || 'assets/images/no-food.png'" alt="Food">
+                    <div class="item-info">
+                        <div class="item-name">{{ item.ten }}</div>
+                        <div class="item-price">{{ item.gia | number }}</div>
+                    </div>
+                    <div class="add-icon"><i class="dx-icon-plus"></i></div>
+                </div>
+            </div>
+        </dx-scroll-view>
+      </div>
+
+    </div>
+  </div>
+</dx-popup>
+
+<dx-popup
+  [(visible)]="isPaymentPopupVisible"
+  title="HÓA ĐƠN THANH TOÁN"
+  [width]="500"
+  [height]="550"
+  [showCloseButton]="true"
+  [dragEnabled]="false">
+  
+  <div *dxTemplate="let data of 'content'">
+    <div class="payment-container" style="padding: 15px;">
+      
+      <h2 style="text-align: center; color: #565eef; margin: 0 0 20px 0;">
+        BÀN {{ paymentData.tableNumber }}
+      </h2>
+
+      <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 16px;">
+        <span style="color: #666;">Tổng tiền món:</span>
+        <span style="font-weight: 600;">{{ paymentData.subTotal | number }} đ</span>
+      </div>
+
+      <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+        <div style="display: flex; gap: 10px;">
+            <dx-text-box 
+                placeholder="Nhập mã khuyến mãi (nếu có)" 
+                [(value)]="paymentData.discountCode"
+                width="100%">
+            </dx-text-box>
+            <dx-button 
+                text="Áp dụng" 
+                type="default" 
+                stylingMode="contained"
+                (onClick)="checkPromotion()">
+            </dx-button>
+        </div>
+        
+        <div *ngIf="paymentData.discountPercent > 0" 
+             style="margin-top: 10px; color: #dc2626; display: flex; justify-content: space-between;">
+            <span>Giảm giá ({{ paymentData.discountPercent }}%):</span>
+            <span>- {{ paymentData.discountValue | number }} đ</span>
+        </div>
+      </div>
+
+      <hr style="border: 1px dashed #ccc; margin: 20px 0;">
+
+      <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 20px;">
+        <strong>KHÁCH CẦN TRẢ:</strong>
+        <strong style="color: #059669; font-size: 24px;">
+            {{ paymentData.finalAmount | number }} đ
+        </strong>
+      </div>
+
+      <dx-button 
+          text="XÁC NHẬN ĐÃ THU TIỀN & TRẢ BÀN" 
+          type="success" 
+          width="100%" 
+          height="50"
+          icon="check"
+          (onClick)="confirmPayment()">
+      </dx-button>
+
+    </div>
+  </div>
+</dx-popup>

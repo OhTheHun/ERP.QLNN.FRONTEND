@@ -1,0 +1,107 @@
+<div class="account-page">
+
+    <!-- HEADER -->
+    <div class="page-header">
+            <h3>Quản lý tài khoản</h3>
+    </div>
+    <div class = "action-button">
+            <dx-button text="Thêm tài khoản" icon="plus" type="default" [elementAttr]="{ class: 'btn-add-acc' }">
+            </dx-button>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid-wrapper">
+        <dx-data-grid [dataSource]="users" keyExpr="id" [showBorders]="true" [columnAutoWidth]="true"
+            [selection]="{ mode: 'multiple' }"
+            (onSelectionChanged)="onSelectionChanged($event)" 
+            (onRowUpdated)="onRowUpdated($event)" 
+            (onRowInserted)="onRowInserted($event)"
+            (onRowRemoved)="onRowRemoved($event)">
+            
+            <!-- SEARCH / FILTER / PAGING -->
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-paging [pageSize]="5"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
+            </dxo-pager>
+
+            <!-- EDITING  -->
+            <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true">
+            </dxo-editing>
+            <!-- Paging, Filtering -->
+            <dxo-paging [pageSize]="5"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true"
+                infoText="Trang {0}/{1} ({2} sản phẩm)">
+            </dxo-pager>
+
+            <!--<dxi-column caption="Hình ảnh" width="100" cellTemplate="hinhAnhCellTemplate">
+            </dxi-column>
+
+            <div *dxTemplate="let data of 'hinhAnhCellTemplate'">
+                <img *ngIf="data.data.hinhAnh" [src]="data.data.hinhAnh" height="80"
+                    style="border-radius: 8px; object-fit: cover;">
+            </div>-->
+
+            <dxi-column dataField="ten" caption="Tên người dùng"
+                [validationRules]="[{ type: 'required', message: 'Tên người dùng không được để trống' }]">
+            </dxi-column>
+
+            <dxi-column dataField="email" caption="Email" [validationRules]="[
+                    { type: 'required', message: 'Email không được để trống' },
+                    { type: 'email', message: 'Email không hợp lệ' }
+                ]">
+            </dxi-column>
+
+            <dxi-column dataField="sdt" caption="Số điện thoại" [validationRules]="[
+                    { type: 'required', message: 'Số điện thoại không được để trống' },
+                    { type: 'pattern', pattern: '^\\d{10,12}$', message: 'Số điện thoại phải từ 10-12 chữ số' }
+                ]">
+            </dxi-column>
+
+            <!-- VAI TRÒ -->
+            <!--<dxi-column dataField="vaiTro" caption="Loại người dùng" cellTemplate="vaiTroCellTemplate"
+                [validationRules]="[{ type: 'required', message: 'Vui lòng chọn vai trò' }]">
+                <dxo-lookup [dataSource]="vaiTro" valueExpr='' displayExpr="name">
+                </dxo-lookup>
+            </dxi-column>-->
+            <dxi-column dataField="vaiTro" caption="Loại người dùng" cellTemplate="vaiTroCellTemplate">
+                <dxo-lookup [dataSource]="vaiTro"> 
+                    </dxo-lookup>
+            </dxi-column>
+
+            <!-- TRẠNG THÁI -->
+            <!--<dxi-column dataField="trangThai" caption="Trạng thái" cellTemplate="trangThaiCellTemplate"
+                [validationRules]="[{ type: 'required', message: 'Vui lòng chọn trạng thái' }]">
+                <dxo-lookup [dataSource]="trangThai" valueExpr=''  displayExpr="name">
+                </dxo-lookup>
+            </dxi-column>-->
+            <dxi-column dataField="trangThai" caption="Trạng thái" cellTemplate="trangThaiCellTemplate">
+                <dxo-lookup [dataSource]="trangThai"> 
+                    </dxo-lookup>
+            </dxi-column>
+
+            <!-- Template -->
+            <div *dxTemplate="let data of 'trangThaiCellTemplate'">
+                <div class="status">
+                    <span [ngClass]="data.data?.trangThai === 'Hoạt động' ? 'status-active' : 'status-inactive'">
+                        {{ data.data.trangThai }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Template -->
+            <div *dxTemplate="let data of 'vaiTroCellTemplate'">
+                <div class="status">
+                    <span [ngClass]="
+                            data.data?.vaiTro === 'THUNGAN' ? 'status-thungan' :
+                            data.data?.vaiTro === 'NHANVIEN' ? 'status-nhanvien' :
+                            data.data?.vaiTro === 'ADMIN' ? 'status-admin' : ''">
+                        {{ data.data?.vaiTro }}
+                    </span>
+                </div>
+    </div>
+
+
+    </dx-data-grid>
+</div>
+
+</div>

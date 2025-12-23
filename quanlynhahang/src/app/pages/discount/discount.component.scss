@@ -1,0 +1,46 @@
+.btn-add-khuyen-mai {
+  border-radius: 20px;
+  background-color: #565eef;
+  color: white;
+  transition: all 0.25s ease;
+}
+
+.btn-add-khuyen-mai:hover {
+  background-color: black;
+  box-shadow: 0 4px 10px rgba(86, 94, 239, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-add-khuyen-mai:active {
+  background-color: #3239b3;
+  transform: translateY(0);
+}
+.button-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+}
+.header h3 {
+    margin: 0 0 12px 0 !important;
+}
+
+.status.active {
+  background-color: #1e8e3e;
+}
+
+.status.inactive {
+  background-color: red;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 110px;       
+  padding: 4px 10px;
+  border-radius: 12px;
+
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+}

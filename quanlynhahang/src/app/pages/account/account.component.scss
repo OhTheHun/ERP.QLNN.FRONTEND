@@ -1,0 +1,172 @@
+.account-page {
+  padding: 16px;
+  min-height: 100%;
+}
+
+/* ===== HEADER ===== */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.page-header h3 {
+  margin: 0;
+  font-weight: 600;
+}
+.action-button {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+/* ===== FILTER ===== */
+.filters {
+  display: flex;
+  gap: 12px;
+}
+
+/* ===== GRID WRAPPER ===== */
+.grid-wrapper {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== DATA GRID ===== */
+::ng-deep .dx-datagrid {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+::ng-deep .dx-datagrid-headers {
+  background: #f3f4f6;
+  font-weight: 600;
+}
+
+::ng-deep .dx-datagrid-rowsview .dx-row:hover {
+  background-color: #f9fafb;
+}
+
+::ng-deep img {
+  display: block;
+  margin: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+}
+
+::ng-deep .dx-command-edit .dx-link {
+  font-size: 16px;
+  margin: 0 4px;
+}
+
+::ng-deep .dx-link-edit {
+  color: #2563eb;
+}
+
+::ng-deep .dx-link-delete {
+  color: #dc2626;
+}
+
+::ng-deep .dx-datagrid-pager {
+  padding-top: 10px;
+}
+
+::ng-deep .dx-datagrid .dx-dropdowneditor-input-wrapper {
+  font-weight: 500;
+}
+
+/* TRẠNG THÁI */
+.status-active {
+    background-color: #28a745; 
+     width: 100%;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+}
+
+.status-inactive {
+    background-color: #dc3545; 
+    color: white;
+    width: 100%;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+}
+
+/* VAI TRÒ NGƯỜI DÙNG */
+.status-khachhang {
+    background-color: #ffe0b2; 
+    width: 100%;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+}
+
+.status-thungan {
+    background-color: #c8e6c9; 
+    width: 100%;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+}
+
+.status-nhanvien {
+    background-color: #bbdefb;
+    padding: 4px 8px;
+    width: 100%;
+    border-radius: 10px;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+}
+
+.status-admin {
+    background-color: #f0f0f0;
+    padding: 4px 8px;
+    width: 100%;
+    border-radius: 10px;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+}
+
+.btn-add-acc {
+  border-radius: 20px;
+  background-color: #565eef;
+  color: white;
+  transition: all 0.25s ease;
+}
+
+.btn-add-acc:hover {
+  background-color: black;
+  box-shadow: 0 4px 10px rgba(86, 94, 239, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-add-acc:active {
+  background-color: #3239b3;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .filters {
+    flex-wrap: wrap;
+  }
+}

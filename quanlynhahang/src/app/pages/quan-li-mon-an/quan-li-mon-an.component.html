@@ -1,0 +1,100 @@
+<div class="page-container">
+
+    <h2 class="title">Quản lý món ăn</h2>
+    
+    <div class="btn-bar">
+        <dx-button text="Xóa các mục đã chọn" type="danger" (onClick)="deleteSelected()"
+            [elementAttr]="{ class: 'btn-delete-selected' }">
+        </dx-button>
+
+        <dx-button text="Thêm sản phẩm" type="success" (onClick)="onAdd()" [elementAttr]="{ class: 'btn-add-product' }">
+        </dx-button>
+    </div>
+
+    <div style="overflow-x: auto; max-width: 100%;">
+        <dx-data-grid [dataSource]="data" keyExpr="id" [showBorders]="true" class="product-grid"
+            (onSelectionChanged)="onSelectionChanged($event)" 
+            (onRowUpdated)="onRowUpdated($event)" 
+            (onRowInserted)="onRowInserted($event)"
+            (onRowRemoved)="onRowRemoved($event)">
+            
+            <dxo-group-panel [visible]="false"></dxo-group-panel>
+            <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+
+            <dxo-editing mode="row" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true">
+            </dxo-editing>
+
+            <dxo-selection mode="multiple"></dxo-selection>
+
+            <dxo-column-chooser [enabled]="true" mode="select" height="500" title="Chọn cột hiển thị">
+                <dxo-search [enabled]="true"></dxo-search>
+            </dxo-column-chooser>
+
+            <dxo-paging [pageSize]="5"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true"
+                infoText="Trang {0}/{1} ({2} sản phẩm)">
+            </dxo-pager>
+
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+            <dxi-column dataField="hinhAnh" caption="Hình ảnh" width="120" alignment="center" cellTemplate="hinhAnhCellTemplate" [allowFiltering]="false" [allowSorting]="false">
+            </dxi-column>
+
+            <dxi-column dataField="ten" caption="Tên sản phẩm" [allowFiltering]="true"
+                [validationRules]="[{ type: 'required', message: 'Tên sản phẩm không được để trống' }]">
+            </dxi-column>
+
+            <dxi-column dataField="danhMuc" caption="Danh mục" width="150" [allowFiltering]="true"
+                [lookup]="{ dataSource: danhMucList, valueExpr: '', displayExpr: '' }"
+                [validationRules]="[{ type: 'required', message: 'Danh mục không được để trống' }]">
+            </dxi-column>
+
+            <dxi-column dataField="trangThai" caption="Trạng thái" width="180" [allowFiltering]="true"
+                [lookup]="{ dataSource: trangThaiOptions, valueExpr: '', displayExpr: '' }"
+                cellTemplate="statusCellTemplate"
+                [validationRules]="[{ type: 'required', message: 'Trạng thái không được để trống' }]">
+            </dxi-column>
+
+            <dxi-column dataField="gia" caption="Giá (VND)" [format]="{ type: 'fixedPoint', precision: 0 }" [allowFiltering]="false"
+                dataType="number" [editorOptions]="{ min: 0 }" 
+                [validationRules]="[
+                { type: 'required', message: 'Giá không được để trống' },
+                { type: 'range', min: 0, message: 'Giá phải ≥ 0' }]">
+            </dxi-column>
+
+            <div *dxTemplate="let data of 'statusCellTemplate'">
+                <div class="status">
+                    <span [ngClass]="data.data.trangThai === 'Hoạt động' ? 'status-active' : 'status-inactive'">
+                        {{ data.data.trangThai }}
+                    </span>
+                </div>
+            </div>
+
+            <div *dxTemplate="let data of 'hinhAnhCellTemplate'">
+                <div class="image-container">
+                    <img *ngIf="data.data.hinhAnh" 
+                         [src]="data.data.hinhAnh" 
+                         alt="Product Image"
+                         class="grid-image"
+                         (click)="openImagePopup(data.data.hinhAnh)" /> <span *ngIf="!data.data.hinhAnh" class="no-image">No Image</span>
+                </div>
+            </div>
+            
+        </dx-data-grid>
+    </div>
+
+</div>
+
+<dx-popup
+    [(visible)]="isImagePopupVisible"
+    [hideOnOutsideClick]="true"
+    [showTitle]="false"
+    [width]="'auto'"
+    [height]="'auto'"
+    [maxWidth]="'90%'"
+    [maxHeight]="'90%'"
+    [shading]="true"
+    shadingColor="rgba(0,0,0,0.8)"> <div *dxTemplate="let data of 'content'" class="popup-image-content">
+        <img [src]="currentImageSrc" class="full-image" alt="Full Preview" />
+    </div>
+</dx-popup>

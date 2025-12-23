@@ -1,0 +1,76 @@
+<div class="header">
+    <div class="stat-card">
+        <div class="stat-icon" style="background-color: #6a33c8;">
+            <i class="dx-icon dx-icon-group"></i>
+        </div>
+
+        <div class="stat-content">
+            <span class="label">Số lượng tài khoản</span>
+            <strong class="value">
+                {{ dashboardStat.soLuongTaiKhoan }}
+            </strong>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background-color: #1edb49;">
+            <i class="dx-icon dx-icon-edit"></i>
+        </div>
+
+        <div class="stat-content">
+            <span class="label">Số lượng bài viết</span>
+            <strong class="value">
+                {{ dashboardStat.soLuongBaiViet }}
+            </strong>
+        </div>
+    </div>
+    <div class="stat-card">
+
+        <div class="stat-icon" style="background-color: #2563eb">
+            <i class="dx-icon dx-icon-food"></i>
+        </div>
+        <div class="stat-content">
+            <span class="label">Số lượng món ăn</span>
+            <strong class="value">
+                {{ dashboardStat.soLuongMonAn }}
+            </strong>
+        </div>
+    </div>
+</div>
+
+<div class="header-chart">
+    <div class="invoice-header">
+        <h3>Thống kê hóa đơn</h3>
+
+        <dx-date-box [(value)]="selectedDate" type="date" displayFormat="yyyy/MM" pickerType="rollers" width="300" 
+            stylingMode="outlined">
+        </dx-date-box>
+    </div>
+
+        <div class="invoice-body">
+            <div class="invoice-legend">
+                <div class="legend-item" *ngFor="let item of invoiceStats">
+                    <span class="color-box" [style.background]="item.color"></span>
+                    <span class="label">{{ item.label }}</span>
+                </div>
+            </div>
+
+            <dx-pie-chart 
+                class="invoice-chart" 
+                [dataSource]="invoiceStats" 
+                type="doughnut" 
+                palette="Soft Pastel" 
+                [innerRadius]="0.4"
+                [customizePoint]="customizePoint">
+
+                <dxi-series argumentField="label" valueField="value">
+                    <dxo-label [visible]="true" position="outside" format="fixedPoint">
+                        <dxo-connector [visible]="true"></dxo-connector>
+                    </dxo-label>
+                </dxi-series>
+
+                <dxo-size [width]="520" [height]="320"></dxo-size>
+                <dxo-legend [visible]="false"></dxo-legend>
+            </dx-pie-chart>
+        </div>
+
+    </div>

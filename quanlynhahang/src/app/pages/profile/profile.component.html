@@ -1,0 +1,86 @@
+<h2>Thông tin user</h2>
+
+<dx-validation-group>
+  <div class="profile-container">
+
+    <div class="dx-card profile-header">
+      <div class="profile-top">
+        <div class="avatar-wrapper">
+          <img class="avatar" [src]="defaultPicture ">
+        </div>
+
+        <div class="description">
+          {{ defaultNote }}
+        </div>
+      </div>
+    </div>
+
+    <!-- BUTTON -->
+    <div class="profile-action-buttons">
+      <dx-button text="{{ isEditing ? 'Lưu thông tin' : 'Chỉnh sửa' }}" [type]="isEditing ? 'success' : 'default'"
+        icon="{{ isEditing ? 'save' : 'edit' }}">
+      </dx-button>
+    </div>
+
+
+    <div class="dx-card profile-form">
+      <!-- TÊN QUẢN LÝ -->
+      <div class="form-row">
+        <label>Tên quản lí</label>
+      <ng-container *ngIf="profile as p">
+        <dx-text-box [value]="p.ten"
+        [readOnly]="!isEditing">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Tên quản lí không được để trống"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </ng-container>
+
+      </div>
+
+      <!-- ĐỊA CHỈ -->
+      <div class="form-row">
+        <label>Vai trò</label>
+        <ng-container *ngIf="profile as p">
+        <dx-text-box [value]="p.vaiTro" 
+          [readOnly]="!isEditing">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Địa chỉ không được để trống"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </ng-container>
+      </div>
+
+      <!-- PHONE -->
+      <div class="form-row">
+        <label>Số điện thoại</label>
+        <ng-container *ngIf="profile as p">
+        <dx-text-box [value]="profile.sdt">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Số điện thoại không được để trống"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </ng-container>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="form-row">
+        <label>Email</label>
+                <ng-container *ngIf="profile as p">
+
+        <dx-text-box [value]="profile.email" (onValueChanged)="profile.email = $event.value" [readOnly]="!isEditing">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Email không được để trống"></dxi-validation-rule>
+            <dxi-validation-rule type="email" message="Email không hợp lệ"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </ng-container>
+      </div>
+
+      <!-- HÌNH ẢNH -->
+
+
+    </div>
+
+  </div>
+</dx-validation-group>
