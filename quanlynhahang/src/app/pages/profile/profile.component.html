@@ -6,11 +6,11 @@
     <div class="dx-card profile-header">
       <div class="profile-top">
         <div class="avatar-wrapper">
-          <img class="avatar" [src]="employee.Picture" />
+          <img class="avatar" [src]="defaultPicture ">
         </div>
 
         <div class="description">
-          {{ employee.Notes }}
+          {{ defaultNote }}
         </div>
       </div>
     </div>
@@ -18,7 +18,7 @@
     <!-- BUTTON -->
     <div class="profile-action-buttons">
       <dx-button text="{{ isEditing ? 'Lưu thông tin' : 'Chỉnh sửa' }}" [type]="isEditing ? 'success' : 'default'"
-        icon="{{ isEditing ? 'save' : 'edit' }}" (onClick)="toggleEdit()">
+        icon="{{ isEditing ? 'save' : 'edit' }}">
       </dx-button>
     </div>
 
@@ -27,62 +27,57 @@
       <!-- TÊN QUẢN LÝ -->
       <div class="form-row">
         <label>Tên quản lí</label>
-        <dx-text-box [value]="employee.ManagerName" (onValueChanged)="employee.ManagerName = $event.value"
-          [readOnly]="!isEditing">
+      <ng-container *ngIf="profile as p">
+        <dx-text-box [value]="p.ten"
+        [readOnly]="!isEditing">
           <dx-validator>
             <dxi-validation-rule type="required" message="Tên quản lí không được để trống"></dxi-validation-rule>
           </dx-validator>
         </dx-text-box>
+      </ng-container>
 
       </div>
 
       <!-- ĐỊA CHỈ -->
       <div class="form-row">
-        <label>Địa chỉ</label>
-        <dx-text-box [value]="employee.Address" (onValueChanged)="employee.Address = $event.value"
+        <label>Vai trò</label>
+        <ng-container *ngIf="profile as p">
+        <dx-text-box [value]="p.vaiTro" 
           [readOnly]="!isEditing">
           <dx-validator>
             <dxi-validation-rule type="required" message="Địa chỉ không được để trống"></dxi-validation-rule>
           </dx-validator>
         </dx-text-box>
-
+      </ng-container>
       </div>
 
       <!-- PHONE -->
       <div class="form-row">
         <label>Số điện thoại</label>
-        <dx-text-box [value]="employee.Phone" (onValueChanged)="employee.Phone = $event.value" [readOnly]="!isEditing">
+        <ng-container *ngIf="profile as p">
+        <dx-text-box [value]="profile.sdt">
           <dx-validator>
             <dxi-validation-rule type="required" message="Số điện thoại không được để trống"></dxi-validation-rule>
           </dx-validator>
         </dx-text-box>
-
+      </ng-container>
       </div>
 
       <!-- EMAIL -->
       <div class="form-row">
         <label>Email</label>
-        <dx-text-box [value]="employee.Email" (onValueChanged)="employee.Email = $event.value" [readOnly]="!isEditing">
+                <ng-container *ngIf="profile as p">
+
+        <dx-text-box [value]="profile.email" (onValueChanged)="profile.email = $event.value" [readOnly]="!isEditing">
           <dx-validator>
             <dxi-validation-rule type="required" message="Email không được để trống"></dxi-validation-rule>
             <dxi-validation-rule type="email" message="Email không hợp lệ"></dxi-validation-rule>
           </dx-validator>
         </dx-text-box>
-
+      </ng-container>
       </div>
 
       <!-- HÌNH ẢNH -->
-      <div class="form-row" style="grid-column: span 2;">
-        <label>Hình Ảnh</label>
-        <dx-text-box placeholder="Nhập URL ảnh..." [(value)]="imageUrlInput"
-          (onValueChanged)="onImageUrlChanged($event)" [readOnly]="!isEditing">
-          <dx-validator>
-            <dxi-validation-rule type="pattern" [pattern]="imageUrlPattern"
-              message="URL ảnh không hợp lệ! Chỉ chấp nhận .jpg hoặc .jpeg">
-            </dxi-validation-rule>
-          </dx-validator>
-        </dx-text-box>
-      </div>
 
 
     </div>

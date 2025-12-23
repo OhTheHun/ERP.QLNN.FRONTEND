@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
@@ -10,6 +10,7 @@ import {
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
 import notify from 'devextreme/ui/notify';
 import { confirm } from 'devextreme/ui/dialog';
+import { AuthService } from '../../shared/services';
 
 @Component({
   templateUrl: 'profile.component.html',
@@ -24,74 +25,31 @@ import { confirm } from 'devextreme/ui/dialog';
     DxiValidationRuleModule
   ],
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
 
   @ViewChild(DxValidationGroupComponent, { static: false })
   validationGroup!: DxValidationGroupComponent;
-  imageUrlPattern = /^https?:\/\/.*\.jpe?g$/i;
+
   isEditing = false;
   imageUrlInput = '';
-  
-  employee = {
-    Picture: 'https://guchat.vn/wp-content/uploads/2025/04/Meme-Cho-5-1.jpg',
-    Notes: 'Là một nhân viên chăm chỉ, nhiệt tình và luôn sẵn sàng giúp đỡ đồng nghiệp.',
-    ManagerName: 'Văn Vĩnh Thái Toàn',
-    Address: 'Los Angeles, CA',
-    Phone: '090 123 4567',
-    Email: 'toan@gmail.com'
-  };
+  profile: any = null;
+
+  defaultPicture: string =
+    'https://cdn2.fptshop.com.vn/unsafe/800x0/meme_cho_1_e568e5b1a5.jpg';
+  defaultNote: string = 'Chó là bạn, không phải tôi';
 
   originalEmployee: any = {};
 
-  toggleEdit() {
-    if (!this.isEditing) {
-      this.originalEmployee = JSON.parse(JSON.stringify(this.employee));
-      this.imageUrlInput = this.employee.Picture; 
-      this.isEditing = true;
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    const profile = this.authService.getProfileUser;
+
+    if (!profile) {
+      notify('Chưa có thông tin người dùng', 'error', 2000);
       return;
     }
 
-    const result = this.validationGroup.instance.validate();
-    if (!result.isValid) {
-      notify("Vui lòng điền đầy đủ thông tin hoặc xem kĩ lại!", "error", 2000);
-      return;
-    }
-
-    this.employee.Picture = this.imageUrlInput.trim() === '' ? '' : this.imageUrlInput.trim();
-
-    confirm("Bạn có chắc chắn muốn lưu thay đổi?", "Xác nhận")
-      .then((ok: boolean) => {
-        if (!ok) {
-          // Rollback dữ liệu cũ
-          this.employee = JSON.parse(JSON.stringify(this.originalEmployee));
-          this.imageUrlInput = this.employee.Picture; // rollback textbox
-          this.isEditing = false;
-          notify("Đã hủy thay đổi!", "error", 2000);
-          return;
-        }
-
-        this.originalEmployee = JSON.parse(JSON.stringify(this.employee));
-        this.isEditing = false;
-        notify("Lưu thông tin thành công!", "success", 2000);
-      });
-  }
-
-  onImageUrlChanged(e: any) {
-  const url = e.value?.trim() || '';
-  this.imageUrlInput = url;
-
-  if (!url) {
-    this.employee.Picture = ''; 
-    return;
-  }
-  if (this.imageUrlPattern.test(url)) {
-    this.employee.Picture = url; 
-  } else {
-    notify("URL ảnh không hợp lệ! Chỉ chấp nhận .jpg hoặc .jpeg", "error", 2000);
-  }
-}
-
-  removeImage() {
-    this.imageUrlInput = ''; 
+    this.profile = { ...profile };
   }
 }

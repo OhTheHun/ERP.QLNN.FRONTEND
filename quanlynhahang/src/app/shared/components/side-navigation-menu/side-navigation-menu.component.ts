@@ -79,7 +79,7 @@ export class SideNavigationMenuComponent
         this._items = [];
         return;
       }
-      this._items = this.buildMenu(user.role);
+      this._items = this.buildMenu(user?.role || 'ADMIN');
     });
   }
   

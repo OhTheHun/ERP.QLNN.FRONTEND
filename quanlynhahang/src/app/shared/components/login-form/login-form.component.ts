@@ -6,7 +6,6 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { AuthService } from '../../services/auth.service';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-form',
@@ -18,32 +17,41 @@ import { HttpClientModule } from '@angular/common/http';
     RouterModule,
     DxFormModule,
     DxButtonModule,
-    DxLoadIndicatorModule,
-    //HttpClientModule
+    DxLoadIndicatorModule
   ]
 })
 export class LoginFormComponent {
+
   loading = false;
-  formData: any = {};
-  profile: any={};
-  constructor(private authService: AuthService, private router: Router) { 
-    //this.profile=authService.profile;
-  }
+  formData: { email?: string; password?: string } = {};
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   async onSubmit(e: Event) {
     e.preventDefault();
+
     const { email, password } = this.formData;
+
+    if (!email || !password) {
+      notify('Vui lòng nhập email và mật khẩu', 'error', 2000);
+      return;
+    }
+
     this.loading = true;
 
     const result = await this.authService.logIn(email, password);
-    //this.loading=false;
+
+    this.loading = false;
+
     if (!result.isOk) {
-      this.loading = false;
       notify(result.message, 'error', 2000);
     }
   }
 
-  onCreateAccountClick = () => {
+  onCreateAccountClick() {
     this.router.navigate(['/create-account']);
   }
 }
