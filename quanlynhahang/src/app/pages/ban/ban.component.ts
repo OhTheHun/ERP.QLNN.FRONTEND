@@ -41,7 +41,7 @@ export class BanComponent implements OnInit {
   // --- BIẾN DỮ LIỆU BÀN & MENU ---
   selectedDate = new Date();
   tables: TableItem[] = [];
-  pageSize = 6; currentPage = 1;
+  pageSize = 8; currentPage = 1;
 
   menuItems: any[] = []; filteredMenu: any[] = [];   
   categories: string[] = []; selectedCategory: string = 'Tất cả';
