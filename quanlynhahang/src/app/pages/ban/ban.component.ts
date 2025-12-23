@@ -14,6 +14,8 @@ import { TableService } from "../../shared/services/table.service";
 import { MenuService } from "../../shared/services/menu.service";
 import { OrderService } from "../../shared/services/order.service";
 import { PromotionService } from "../../shared/services/promotion.service"; 
+import { AuthService } from "../../shared/services";
+import notify from "devextreme/ui/notify";
 
 export interface TableItem {
   id: string;
@@ -70,15 +72,17 @@ export class BanComponent implements OnInit {
     discountValue: 0,  
     finalAmount: 0     
   };
-
+  profile: any = null;
   constructor(
     private tableService: TableService,
     private menuService: MenuService,
     private orderService: OrderService,
-    private promotionService: PromotionService
+    private promotionService: PromotionService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    
     this.loadTables();
     this.loadMenu(); 
   }
@@ -247,6 +251,10 @@ export class BanComponent implements OnInit {
   // =========================================================
   
   openPaymentPopup(table: TableItem) {
+  const profile = this.authService.getProfileUser;
+  this.profile = {...profile};
+    if (!(this.profile.vaiTro === "THUNGAN" || this.profile.vaiTro === "ADMIN")) {return notify("Bạn không có quyền thanh toán cho khách nếu bạn là nhân viên", 'error')}
+
     this.orderService.getActiveOrderByTable(table.tenBan).subscribe({
       next: (order: any) => {
         if (!order) { alert("Bàn này chưa có đơn hàng!"); return; }
