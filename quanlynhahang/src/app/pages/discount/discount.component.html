@@ -1,11 +1,9 @@
 <div class="page-container">
 
-  <!-- Header -->
   <div class="header">
     <h3>Quản lý khuyến mãi</h3>
   </div>
 
-  <!-- Toolbar -->
   <div class="button-bar">
     <dx-button
       text="Thêm khuyến mãi"
@@ -15,75 +13,73 @@
     </dx-button>
   </div>
 
-  <!-- DataGrid -->
   <dx-data-grid
     [dataSource]="promotions"
     keyExpr="id"
     [showBorders]="true"
     [columnAutoWidth]="true"
-    [rowAlternationEnabled]="true">
+    [rowAlternationEnabled]="true"
+    (onRowUpdating)="onRowUpdating($event)" 
+    (onRowRemoving)="onRowRemoving($event)">
     
     <dxo-paging [pageSize]="5"></dxo-paging>
-        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true"
-            infoText="Trang {0}/{1} ({2} khuyến mãi)">
-        </dxo-pager>
+    <dxo-pager 
+        [showPageSizeSelector]="true" 
+        [allowedPageSizes]="[5, 10, 20]" 
+        [showInfo]="true"
+        infoText="Trang {0}/{1} ({2} khuyến mãi)">
+    </dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
 
-
-    <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true">
-            </dxo-editing>
+    <dxo-editing 
+        mode="row" 
+        [allowUpdating]="true" 
+        [allowDeleting]="true"
+        [useIcons]="true">
+    </dxo-editing>
             
-    <!-- Mã khuyến mãi -->
     <dxi-column
       dataField="code"
       caption="Mã khuyến mãi"
       [validationRules]="[{ type: 'required', message: 'Không thể để trống' }]">
     </dxi-column>
 
-    <!-- Phần trăm giảm -->
     <dxi-column
       dataField="discountPercent"
       caption="Giảm (%)"
-      editorType="dxNumberBox"
+      dataType="number"
       alignment="center"
-      [editorOptions]="{
-        min: 1,
-        max: 100,
-        showSpinButtons: true
-      }"
+      [editorOptions]="{ min: 1, max: 100, showSpinButtons: true }"
       [validationRules]="[{ type: 'required', message: 'Nhập một con số cụ thể' }]">
     </dxi-column>
 
-    <!-- Trạng thái -->
     <dxi-column
         dataField="isActive"
         caption="Áp dụng"
         alignment="center"
         cellTemplate="statusTpl"
         [lookup]="{
-        dataSource: statusLookup,
-        valueExpr: 'value',
-        displayExpr: 'text'
+            dataSource: statusLookup,
+            valueExpr: 'value',
+            displayExpr: 'text'
         }">
     </dxi-column>
 
-
     <div *dxTemplate="let data of 'statusTpl'">
-    <span
-        class="status"
-        [ngClass]="{
-        'active': data.data.isActive === true,
-        'inactive': data.data.isActive === false
-        }">
-        {{ data.data.isActive ? 'Đang áp dụng' : 'Ngừng áp dụng' }}
-    </span>
+        <span
+            class="status"
+            [ngClass]="{
+            'active': data.data.isActive === true,
+            'inactive': data.data.isActive === false
+            }">
+            {{ data.data.isActive ? 'Đang áp dụng' : 'Ngừng áp dụng' }}
+        </span>
     </div>
 
   </dx-data-grid>
 
 </div>
 
-<!-- POPUP DÙNG CHUNG -->
 <pop-up-add
   [title]="popupTitle"
   [(visible)]="popupVisible"
